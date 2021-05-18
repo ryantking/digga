@@ -17,7 +17,10 @@ let
     })
   ];
 
-  pkgs' = pkgs.appendOverlays overlays;
+  pkgs' = import pkgs.path {
+    inherit (pkgs) system;
+    inherit overlays;
+  };
 
   flk = pkgs'.callPackage ./flk.nix { };
 
@@ -25,15 +28,6 @@ let
     inherit (pkgs') system;
     modules = [ ];
   }).config.system.build;
-
-  # Add all packages from overlays to shell
-  # Follow same logic as exporting packages except don't filter out inputs
-  allOverlays = lib.exporter.overlaysFromChannelsExporter {
-    # function requires system-spaced and channel-spaced package set
-    pkgs.${pkgs'.system}.channel = pkgs';
-  };
-  customPackages = lib.builder.packagesFromOverlaysBuilderConstructor allOverlays { pkgs = pkgs'; };
-
 in
 pkgs'.devshell.mkShell {
   imports = [ (pkgs'.devshell.importTOML ./devshell.toml) ];
@@ -42,7 +36,8 @@ pkgs'.devshell.mkShell {
     nixos-install
     nixos-generate-config
     nixos-enter
-  ] ++ (builtins.attrValues customPackages);
+    pkgs'.nixos-rebuild
+  ];
 
   git.hooks = {
     pre-commit.text = lib.fileContents ./pre-commit.sh;
