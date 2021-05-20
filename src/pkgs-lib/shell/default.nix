@@ -52,13 +52,13 @@ let
           ${pkgs'.nixFlakes}/bin/nix --experimental-features "nix-command flakes ca-references" "${"\${@}"}"
         '';
       }
+      {
+        name = "deploy";
+        package = deploy-rs;
+        help = "A simple multi-profile Nix-flake deploy tool.";
+      }
     ]
-    ++ lib.optional (system != "i686-linux") { package = cachix; }
-    ++ lib.optional (system == "x86_64-linux") {
-      name = "deploy";
-      package = deploy-rs;
-      help = "A simple multi-profile Nix-flake deploy tool.";
-    };
+    ++ lib.optional (system != "i686-linux") { package = cachix; };
   };
 in
 (pkgs'.devshell.eval {
