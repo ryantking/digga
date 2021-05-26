@@ -26,8 +26,10 @@ let
     modules = [ ];
   }).config.system.build;
 
+
   configuration = {
-    imports = [ (pkgs'.devshell.importTOML ./devshell.toml) ] ++ extraModules;
+    imports = [ (pkgs'.devshell.importTOML ./devshell.toml) ]
+      ++ (map lib.maybeImportDevshellModule extraModules);
 
     packages = with installPkgs; [
       nixos-install
@@ -58,9 +60,4 @@ let
     ++ lib.optional (system != "i686-linux") { package = cachix; };
   };
 in
-(pkgs'.devshell.eval {
-  inherit configuration;
-  # Allows us to use devshell's `importTOML` within a module
-  # used in evalArgs to auto-import toml files
-  extraSpecialArgs.pkgs = pkgs';
-}).shell
+pkgs'.devshell.mkShell configuration
