@@ -18,7 +18,7 @@ in
       buildInputs = [
         pkgs.nix
         (
-          let tests = import ./lib.nix { inherit pkgs lib; }; in
+          let tests = import ./lib { inherit pkgs lib; }; in
           if tests == [ ] then null
           else throw (builtins.toJSON tests)
         )
@@ -39,7 +39,10 @@ in
       touch $out
     '';
 
-  checksTest = mkOutputTest "checks";
+  checksTest = mkOutputTest "checks" // {
+    # debug the fullFLake through repl at checks.<system>.checksTest.fullFlake
+    inherit fullFlake;
+  };
 
   devShellTest = fullFlake.devShell.${pkgs.system};
 }
