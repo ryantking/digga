@@ -22,7 +22,11 @@
           lists = import ./src/lists.nix { lib = combinedLib; };
           strings = import ./src/strings.nix { lib = combinedLib; };
           modules = import ./src/modules.nix { lib = combinedLib; };
-          importers = import ./src/importers.nix { lib = combinedLib; };
+
+          importers = import ./src/importers.nix {
+            lib = combinedLib;
+            inherit devshell;
+          };
 
           generators = import ./src/generators.nix {
             lib = combinedLib;
@@ -39,10 +43,10 @@
             inherit deploy devshell;
           };
 
-          inherit (attrs) mapFilterAttrs genAttrs' safeReadDir concatAttrs;
-          inherit (lists) profileMap collectProfiles unifyOverlays;
+          inherit (attrs) mapFilterAttrs genAttrs' concatAttrs;
+          inherit (lists) unifyOverlays;
           inherit (strings) rgxToString;
-          inherit (importers) mkProfileAttrs pathsIn importHosts;
+          inherit (importers) profileMap flattenTree rakeLeaves mkProfileAttrs maybeImportDevshellModule;
           inherit (generators) mkSuites mkDeployNodes mkHomeConfigurations;
         }
       );
@@ -61,29 +65,28 @@
 
     //
 
-    utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-      in
-      {
-        checks = import ./tests {
-          pkgs = pkgs // {
-            input = nixpkgs;
+    utils.lib.systemFlake {
+      inherit self inputs;
+      channels.pkgs.input = nixpkgs;
+      outputsBuilder = channels:
+        let inherit (channels) pkgs; in
+        {
+          checks = import ./tests {
+            inherit pkgs;
+            lib = nixlib.lib // lib;
           };
-          lib = nixlib.lib // lib;
-        };
 
-        devShell = lib.pkgs-lib.shell { inherit pkgs; };
+          devShell = lib.pkgs-lib.shell { inherit pkgs; };
 
-        packages = {
-          mkFlakeDoc = pkgs.writeText "mkFlakeOptions.md"
-            (
-              pkgs.nixosOptionsDoc {
-                inherit (lib.mkFlake.evalArgs { args = { }; }) options;
-              }
-            ).optionsMDDoc;
+          packages = {
+            mkFlakeDoc = pkgs.writeText "mkFlakeOptions.md"
+              (
+                pkgs.nixosOptionsDoc {
+                  inherit (lib.mkFlake.evalArgs { args = { }; }) options;
+                }
+              ).optionsMDDoc;
+          };
         };
-      }
-    );
+    };
 
 }

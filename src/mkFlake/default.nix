@@ -3,7 +3,7 @@ let
   inherit (builtins) mapAttrs attrNames attrValues head isFunction;
 in
 
-_: { self, inputs, ... } @ args:
+_: { self, ... } @ args:
 let
 
   config = lib.mkFlake.evalArgs {
@@ -16,11 +16,11 @@ let
 
   defaultModules = with lib.modules; [
     (hmDefaults {
-      inherit (cfg.home) suites;
+      specialArgs = cfg.home.importables;
       modules = cfg.home.modules ++ cfg.home.externalModules;
     })
     (globalDefaults {
-      inherit self inputs;
+      inherit self;
     })
   ];
 
@@ -41,7 +41,8 @@ let
 in
 lib.systemFlake (lib.mergeAny
   {
-    inherit self inputs hosts;
+    inherit self hosts;
+    inherit (self) inputs;
     inherit (cfg) channelsConfig supportedSystems;
 
     channels = mapAttrs
@@ -63,7 +64,7 @@ lib.systemFlake (lib.mergeAny
       })
     ];
     hostDefaults = lib.mergeAny hostDefaults {
-      specialArgs.suites = cfg.nixos.suites;
+      specialArgs = cfg.nixos.importables;
       modules = cfg.nixos.hostDefaults.externalModules ++ defaultModules;
       builder = args: args.specialArgs.channel.input.lib.nixosSystem (lib.mergeAny args {
         # So modules and functions can create their own version of the build
@@ -71,32 +72,45 @@ lib.systemFlake (lib.mergeAny
       });
     };
 
-    nixosModules = lib.exporter.modulesFromList cfg.nixos.hostDefaults.modules;
+    nixosModules = lib.exporters.modulesFromList cfg.nixos.hostDefaults.modules;
 
-    homeModules = lib.exporter.modulesFromList cfg.home.modules;
+    homeModules = lib.exporters.modulesFromList cfg.home.modules;
 
-    overlays = lib.exporter.overlaysFromChannelsExporter {
+    devshellModules = lib.exporters.modulesFromList {
+      paths = cfg.devshell.modules;
+      _import = lib.maybeImportDevshellModule;
+    };
+
+    overlays = lib.exporters.internalOverlays {
       # since we can't detect overlays owned by self
       # we have to filter out ones exported by the inputs
       # optimally we would want a solution for NixOS/nix#4740
-      inherit inputs;
-      inherit (self) pkgs;
+      inherit (self) pkgs inputs;
     };
 
-    packagesBuilder = lib.builder.packagesFromOverlaysBuilderConstructor self.overlays;
+    outputsBuilder = channels:
+      let
+        defaultChannel = channels.${cfg.nixos.hostDefaults.channelName};
+      in
+      lib.mergeAny
+        {
+          packages = lib.exporters.fromOverlays self.overlays channels;
 
-    checksBuilder = channels:
-      lib.pkgs-lib.tests.mkChecks {
-        pkgs = getDefaultChannel channels;
-        inherit (self.deploy) nodes;
-        hosts = self.nixosConfigurations;
-        homes = self.homeConfigurations or { };
-      };
+          checks = lib.pkgs-lib.tests.mkChecks {
+            pkgs = defaultChannel;
+            inherit (self.deploy) nodes;
+            hosts = self.nixosConfigurations;
+            homes = self.homeConfigurations or { };
+          };
 
-    devShellBuilder = channels:
-      lib.pkgs-lib.shell {
-        pkgs = getDefaultChannel channels;
-      };
+          devShell = lib.pkgs-lib.shell {
+            pkgs = defaultChannel;
+            extraModules = cfg.devshell.modules ++ cfg.devshell.externalModules;
+          };
+        }
+        (cfg.outputsBuilder channels);
+
   }
+
   otherArguments # for overlays list order
 )

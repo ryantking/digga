@@ -1,19 +1,19 @@
 { lib }:
 {
-  hmDefaults = { suites, modules }:
+  hmDefaults = { specialArgs, modules }:
     { options, ... }: {
       config = lib.optionalAttrs (options ? home-manager) {
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
 
-          extraSpecialArgs = { inherit suites; };
+          extraSpecialArgs = specialArgs;
           sharedModules = modules;
         };
       };
     };
 
-  globalDefaults = { self, inputs }:
+  globalDefaults = { self }:
     let
       experimentalFeatures = [
         "flakes"
@@ -28,14 +28,13 @@
       nix.nixPath = [
         "nixpkgs=${channel.input}"
         "nixos-config=${self}/lib/compat/nixos"
-      ] ++ lib.optionals (inputs ? home) [
-        "home-manager=${inputs.home}"
+      ] ++ lib.optionals (self.inputs ? home) [
+        "home-manager=${self.inputs.home}"
       ];
 
-      nix.registry = {
-        devos.flake = self;
-        nixos.flake = channel.input;
-      };
+      # package and option is from fup
+      environment.systemPackages = [ pkgs.fup-repl ];
+      nix.generateRegistryFromInputs = lib.mkDefault true;
 
       nix.extraOptions = ''
         experimental-features = ${lib.concatStringsSep " "
@@ -54,16 +53,16 @@
       system.configurationRevision = lib.mkIf (self ? rev) self.rev;
     };
 
-  isoConfig = { self, inputs, fullHostConfig }:
-    { config, modulesPath, suites, ... }: {
+  isoConfig = { self, fullHostConfig }:
+    { config, modulesPath, ... }@args: {
 
       imports = [ "${modulesPath}/installer/cd-dvd/installation-cd-minimal-new-kernel.nix" ];
       # avoid unwanted systemd service startups
       # all strings in disabledModules get appended to modulesPath
       # so convert each to list which can be coerced to string
-      disabledModules = map lib.singleton suites.allProfiles;
+      disabledModules = map lib.singleton (args.suites.allProfiles or [ ]);
 
-      nix.registry = lib.mapAttrs (n: v: { flake = v; }) inputs;
+      nix.registry = lib.mapAttrs (n: v: { flake = v; }) self.inputs;
 
       isoImage.isoBaseName = "nixos-" + config.networking.hostName;
       isoImage.contents = [{
@@ -114,6 +113,5 @@
         };
       };
     };
-
 }
 

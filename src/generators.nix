@@ -27,12 +27,14 @@
 
           profiles.system = {
             user = "root";
-            path = deploy.lib.x86_64-linux.activate.nixos config;
+            path = deploy.lib.${config.config.nixpkgs.system}.activate.nixos config;
           };
         }
         extraConfig)
       hosts;
 
+  # DEPRECATED, suites no longer needs an explicit function after the importables generalization
+  # deprecation message for suites is already in evalArgs
   mkSuites = { suites, profiles }:
     let
       profileSet = lib.genAttrs' profiles (path: {
@@ -40,11 +42,11 @@
         value = lib.mkProfileAttrs (toString path);
       });
 
-      definedSuites = suites profileSet;
+      definedSuites = lib.mapAttrs (_: v: lib.profileMap v) (suites profileSet);
 
-      allProfiles = lib.collectProfiles profileSet;
+      allProfiles = lib.foldl (lhs: rhs: lhs ++ rhs) [ ] (builtins.attrValues definedSuites);
     in
-    lib.mapAttrs (_: v: lib.profileMap v) definedSuites // {
+    definedSuites // {
       inherit allProfiles;
     };
 }

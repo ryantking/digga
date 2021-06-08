@@ -19,10 +19,14 @@ usage () {
   "up" "Generate $DEVSHELL_ROOT/hosts/up-$HOSTNAME.nix" \
   "update [INPUT]" "Update and commit the lock file, or specific input" \
   "get (core|community) [DEST]" "Copy the desired template to DEST" \
+  "doi HOST" "Generate DigitalOcean image of HOST" \
   "iso HOST" "Generate an ISO image of HOST" \
+  "vm HOST" "Generate a vm for HOST" \
+  "vm run HOST" "run a one-shot vm for HOST" \
   "install HOST [ARGS]" "Shortcut for nixos-install" \
   "home HOST USER [switch]" "Home-manager config of USER from HOST" \
-  "HOST (switch|boot|test)" "Shortcut for nixos-rebuild"
+  "HOST (switch|boot|test)" "Shortcut for nixos-rebuild" \
+  "repl FLAKE" "Enter a repl with the flake's outputs"
 }
 
 case "$1" in
@@ -71,10 +75,45 @@ case "$1" in
     fi
     ;;
 
+  "doi")
+    nix build \
+      "$DEVSHELL_ROOT#nixosConfigurations.$2.config.system.build.digitalOcean" \
+      -o \
+      "$DEVSHELL_ROOT/doi/$2.qcow2" \
+      "${@:3}"
+    ;;
+
   "iso")
     nix build \
       "$DEVSHELL_ROOT#nixosConfigurations.$2.config.system.build.iso" \
+      -o \
+      "$DEVSHELL_ROOT/iso/$2.iso" \
       "${@:3}"
+    ;;
+
+  "vm")
+    if [[ "$2" == "run" ]]; then
+      rm -rf "$DEVSHELL_ROOT/vm/tmp/$3"* \
+      && nix build \
+        "$DEVSHELL_ROOT#nixosConfigurations.$3.config.system.build.vm" \
+        -o "$DEVSHELL_ROOT/vm/tmp/$3" \
+        "${@:4}" \
+      && \
+      ( \
+        export NIX_DISK_IMAGE="$DEVSHELL_ROOT/vm/tmp/$3.qcow2" \
+        && "$DEVSHELL_ROOT/vm/tmp/$3/bin/run-$3-vm" \
+      ) \
+      && rm -rf "$DEVSHELL_ROOT/vm/tmp/$3"* \
+      && rmdir --ignore-fail-on-non-empty "$DEVSHELL_ROOT/vm/tmp"
+    else
+      nix build \
+        "$DEVSHELL_ROOT#nixosConfigurations.$2.config.system.build.vm" \
+        -o "$DEVSHELL_ROOT/vm/$2" \
+        "${@:3}" \
+      && echo "export NIX_DISK_IMAGE=\"$DEVSHELL_ROOT/vm/$2.qcow2\"" > "$DEVSHELL_ROOT/vm/run-$2" \
+      && echo "$DEVSHELL_ROOT/vm/$2/bin/run-$2-vm" >> "$DEVSHELL_ROOT/vm/run-$2" \
+      && chmod +x "$DEVSHELL_ROOT/vm/run-$2"
+    fi
     ;;
 
   "install")
@@ -91,6 +130,10 @@ case "$1" in
     else
       nix build "$ref" "${@:4}"
     fi
+    ;;
+
+  "repl")
+    repl ${@:2}
     ;;
 
   *)

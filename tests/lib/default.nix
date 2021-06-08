@@ -27,16 +27,6 @@ lib.runTests {
     expected = { foobar = 1; };
   };
 
-  testPathsIn = {
-    expr = pathsIn (toString ./testPathsIn);
-
-    expected = map toString [
-      ./testPathsIn/bar
-      ./testPathsIn/baz
-      ./testPathsIn/foo
-    ];
-  };
-
   testRgxToString = lib.testAllTrue [
     (rgxToString ".+x" "vxk" == "vx")
     (rgxToString "^fo" "foo" == "fo")
@@ -44,27 +34,23 @@ lib.runTests {
     (rgxToString "hat" "foohatbar" == "hat")
   ];
 
-  testSafeReadDir = {
-    expr = safeReadDir ./profiles // safeReadDir ./nonexistentdir;
-    expected = {
-      foo = "directory";
-      t = "directory";
+  testRakeLeaves = {
+    expr = importers.rakeLeaves ./profiles;
+    expected  = {
+      f = ./profiles/f.nix;
+      foo = ./profiles/foo;
+      t = {
+        bar = ./profiles/t/bar.nix;
+      };
     };
   };
 
-  testSuites = {
-    expr = mkSuites {
-      suites = { profiles, ... }: with profiles; {
-        bar = [ foo ];
-      };
-      profiles = [ (./profiles) ];
-    };
-    expected = {
-      bar = [ (toString ./profiles/foo) ];
-      allProfiles = [
-        (toString ./profiles/foo)
-        (toString ./profiles/t)
-      ];
+  testFlattenTree = {
+    expr = importers.flattenTree (importers.rakeLeaves ./profiles);
+    expected  = {
+      f = ./profiles/f.nix;
+      foo = ./profiles/foo;
+      "t.bar" = ./profiles/t/bar.nix;
     };
   };
 }

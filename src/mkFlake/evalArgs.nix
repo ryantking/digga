@@ -5,10 +5,10 @@ let
   argOpts = with lib; { config, ... }:
     let
       cfg = config;
-      inherit (config) self;
+      inherit (args) self;
 
       maybeImport = obj:
-        if (builtins.typeOf obj == "path") || (builtins.typeOf obj == "string") then
+        if (builtins.isPath obj || builtins.isString obj) && lib.hasSuffix ".nix" obj then
           import obj
         else
           obj;
@@ -22,7 +22,7 @@ let
 
       # to export modules we need paths to get the name
       exportModuleType = with types;
-        (addCheck path (x: moduleType.check (import x))) // {
+        (addCheck path (x: moduleType.check (maybeImport x))) // {
           description = "path to a module";
         };
       overlayType = pathTo (types.anything // {
@@ -38,8 +38,6 @@ let
       # To simplify apply keys and improve type checking
       pathTo = elemType: with types; coercedTo path maybeImport elemType;
 
-      pathToListOf = elemType: with types; pathTo (listOf elemType);
-
       coercedListOf = elemType: with types;
         coercedTo anything (x: flatten (singleton x)) (listOf elemType);
 
@@ -49,8 +47,8 @@ let
         options = with types; {
           input = mkOption {
             type = flakeType;
-            default = cfg.inputs.${name};
-            defaultText = "inputs.<name>";
+            default = self.inputs.${name};
+            defaultText = "self.inputs.<name>";
             description = ''
               nixpkgs flake input to use for this channel
             '';
@@ -105,7 +103,7 @@ let
       externalModulesModule = {
         options = {
           externalModules = mkOption {
-            type = with types; listOf moduleType;
+            type = with types; coercedListOf moduleType;
             default = [ ];
             description = ''
               modules to include that won't be exported
@@ -170,29 +168,62 @@ let
         };
       };
 
-      # profiles and suites - which are profile collections
-      profilesModule = { config, ... }: {
+      suitesDeprecationMessage = ''
+        WARNING: The 'suites' and `profiles` options have been deprecated, you can now create
+        both with the importables option. `rakeLeaves` can be used to create profiles and
+        by passing a module or `rec` set to `importables`, suites can access profiles.
+        Example:
+        ```
+        importables = rec {
+          profiles = digga.lib.importers.rakeLeaves ./profiles;
+          suites = with profiles; { };
+        }
+        ```
+        See https://github.com/divnix/digga/pull/30 for more details
+      '';
+      importablesModule = { config, options, ... }: {
+        config = {
+          importables = mkIf options.suites.isDefined {
+            suites = builtins.trace suitesDeprecationMessage config.suites;
+          };
+        };
         options = with types; {
           profiles = mkOption {
             type = listOf path;
             default = [ ];
-            description = ''
-              profile folders that can be collected into suites
-              the name of the argument passed to suites is based
-              on the folder name.
-              [ ./profiles ] => { profiles }:
-            '';
+            description = suitesDeprecationMessage;
           };
           suites = mkOption {
             type = pathTo (functionTo attrs);
-            default = _: { };
             apply = suites: lib.mkSuites {
               inherit suites;
               inherit (config) profiles;
             };
+            description = suitesDeprecationMessage;
+          };
+          importables = mkOption {
+            type = submoduleWith {
+              modules = [{
+                freeformType = attrs;
+                options = {
+                  suites = mkOption {
+                    type = attrsOf (coercedListOf path);
+                    # add `allProfiles` to it here
+                    apply = suites: suites // {
+                      allProfiles = lib.foldl
+                        (lhs: rhs: lhs ++ rhs) [ ]
+                        (builtins.attrValues suites);
+                    };
+                    description = ''
+                      collections of profiles
+                    '';
+                  };
+                };
+              }];
+            };
+            default = { };
             description = ''
-              Function that takes profiles and returns suites for this config system
-              These can be accessed through the 'suites' special argument.
+              Packages of paths to be passed to modules as `specialArgs`.
             '';
           };
         };
@@ -207,13 +238,6 @@ let
         self = mkOption {
           type = flakeType;
           description = "The flake to create the devos outputs for";
-        };
-        inputs = mkOption {
-          type = attrsOf flakeType;
-          description = ''
-            inputs for this flake
-            used to set channel defaults and create registry
-          '';
         };
         supportedSystems = mkOption {
           type = listOf str;
@@ -238,10 +262,19 @@ let
             nixpkgs channels to create
           '';
         };
+        outputsBuilder = mkOption {
+          type = functionTo attrs;
+          default = channels: { };
+          defaultText = "channels: { }";
+          description = ''
+            builder for flake system-spaced outputs
+            The builder gets passed an attrset of all channels
+          '';
+        };
         nixos = mkOption {
           type = submoduleWith {
             # allows easy use of the `imports` key
-            modules = [ (includeHostsModule "nixos") profilesModule ];
+            modules = [ (includeHostsModule "nixos") importablesModule ];
           };
           default = { };
           description = ''
@@ -252,7 +285,7 @@ let
           type = submoduleWith {
             # allows easy use of the `imports` key
             modules = [
-              profilesModule
+              importablesModule
               (exportModulesModule "home")
               externalModulesModule
             ];
@@ -260,6 +293,19 @@ let
           default = { };
           description = ''
             hosts, modules, suites, and profiles for home-manager
+          '';
+        };
+        devshell = mkOption {
+          type = submoduleWith {
+            modules = [
+              (exportModulesModule "devshell")
+              externalModulesModule
+            ];
+          };
+          default = { };
+          description = ''
+            Modules to include in your devos shell. the `modules` argument
+            will be exported under the `devshellModules` output
           '';
         };
       };
