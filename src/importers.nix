@@ -1,4 +1,4 @@
-{ lib, devshell }:
+{ lib }:
 let
   flattenTree =
     /**
@@ -102,11 +102,11 @@ let
           let
             path = dirPath + "/${file}";
           in
-            if (type == "regular")
-              || (type == "directory" && builtins.pathExists (path + "/default.nix"))
-            then path
-            # recurse on directories that don't contain a `default.nix`
-            else rakeLeaves path;
+          if (type == "regular")
+            || (type == "directory" && builtins.pathExists (path + "/default.nix"))
+          then path
+          # recurse on directories that don't contain a `default.nix`
+          else rakeLeaves path;
       };
 
       files = lib.filterAttrs seive (builtins.readDir dirPath);
@@ -185,17 +185,9 @@ in
     {
       # Meant to output a module that sets the hosts option (including constructed host names)
       hosts = lib.mapAttrs
-        (n: v: { modules = [ { imports = [ v ]; } ]; } )
+        (n: v: { modules = [{ imports = [ v ]; }]; })
         (flattenTree (rakeLeaves dir));
     };
-
-  maybeImportDevshellModule = item:
-    let isPath = builtins.isPath item || builtins.isString item; in
-    if isPath && lib.hasSuffix ".toml" item then
-      devshell.lib.importTOML item
-    else if isPath && lib.hasSuffix ".nix" then
-      import item
-    else item;
 
 }
 
