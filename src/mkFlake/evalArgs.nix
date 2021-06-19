@@ -13,7 +13,7 @@ let
             devshell.lib.importTOML obj
           else
           { _file = obj; } # for errors
-          // import obj;
+          // import obj
         else
           obj;
 
