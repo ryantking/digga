@@ -198,11 +198,11 @@
         "flake-utils": "flake-utils"
       },
       "locked": {
-        "lastModified": 1624128087,
-        "narHash": "sha256-wRWKD7uBVJ1Iwf3HXq0J0QDrr8P8WoPBT/6ch1MyJnM=",
+        "lastModified": 1624128362,
+        "narHash": "sha256-17AQ3jZkC++sZmomzeb3DGud35t1btFNakcjWMa7fA0=",
         "owner": "gytis-ivaskevicius",
         "repo": "flake-utils-plus",
-        "rev": "66f93728aca19fc54d9701d503a7154b0dd90ae0",
+        "rev": "5484ad41e969c2f3775bfba9d561da8a9f84f771",
         "type": "github"
       },
       "original": {
