@@ -7,27 +7,24 @@ let
       cfg = config;
       inherit (args) self;
 
-
-      maybeImportDevshellModule = path:
-        if lib.hasSuffix ".toml" path then
-          devshell.lib.importTOML path
-        else import path;
-
-
       maybeImport = obj:
         if (builtins.isPath obj || builtins.isString obj) then
-          maybeImportDevshellModule obj
+          if lib.hasSuffix ".toml" path then
+            devshell.lib.importTOML obj
+          else
+          { _file = obj; } # for errors
+          // import obj;
         else
           obj;
 
       /* Custom types needed for arguments */
 
-      moduleType = with types; pathTo (anything // {
+      moduleType = with types; pathToOr (anything // {
         inherit (submodule { }) check;
         description = "valid module";
       });
 
-      overlayType = pathTo (types.anything // {
+      overlayType = pathToOr (types.anything // {
         check = builtins.isFunction;
         description = "valid Nixpkgs overlay";
       });
@@ -38,7 +35,7 @@ let
 
       # Apply maybeImport during merge and before check
       # To simplify apply keys and improve type checking
-      pathTo = elemType: with types; coercedTo path maybeImport elemType;
+      pathToOr = elemType: with types; coercedTo path maybeImport elemType;
 
       coercedListOf = elemType: with types;
         coercedTo anything (x: flatten (singleton x)) (listOf elemType);
@@ -66,7 +63,7 @@ let
             '';
           };
           config = mkOption {
-            type = pathTo attrs;
+            type = pathToOr attrs;
             default = { };
             apply = lib.recursiveUpdate cfg.channelsConfig;
             description = ''
@@ -130,7 +127,7 @@ let
       exportModulesModule = name: {
         options = {
           modules = mkOption {
-            type = with types; pathTo (coercedListOf moduleType);
+            type = with types; pathToOr (coercedListOf moduleType);
             default = [ ];
             description = ''
               modules to include in all hosts and export to ${name}Modules output
@@ -199,7 +196,7 @@ let
             description = suitesDeprecationMessage;
           };
           suites = mkOption {
-            type = pathTo (functionTo attrs);
+            type = pathToOr (functionTo attrs);
             apply = suites: lib.mkSuites {
               inherit suites;
               inherit (config) profiles;
@@ -252,7 +249,7 @@ let
           '';
         };
         channelsConfig = mkOption {
-          type = pathTo attrs;
+          type = pathToOr attrs;
           default = { };
           description = ''
             nixpkgs config for all channels
