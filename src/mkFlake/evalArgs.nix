@@ -9,7 +9,7 @@ let
 
       maybeImport = obj:
         if (builtins.isPath obj || builtins.isString obj) then
-          if lib.hasSuffix ".toml" path then
+          if lib.hasSuffix ".toml" obj then
             devshell.lib.importTOML obj
           else
           { _file = obj; } # for errors
