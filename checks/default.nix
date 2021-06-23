@@ -1,19 +1,17 @@
-{ pkgs, lib }:
+{ system ? builtins.currentSystem
+, inputs # flake style polyfill not possible, since this depends on digga's internals
+}:
 let
-  fullFlake = import ./fullFlake { inherit pkgs lib; };
 
-  mkOutputTest = output:
-    let
-      outputs = builtins.attrValues (fullFlake.${output}.${pkgs.system});
-    in
-    pkgs.runCommandNoCC "${output}-test"
-      {
-        buildInputs = outputs;
-      } ''
-      echo "${toString outputs}" > $out
-    '';
+  nixpkgs = inputs.nixpkgs;
+  diggalib = inputs.lib; # digga internals
+  nixlib = inputs.nixlib;
+  lib = nixlib // diggalib;
+  pkgs = import nixpkgs { inherit system; config = { }; overlays = [ ]; };
+
 in
 {
+
   libTests = pkgs.runCommandNoCC "devos-lib-tests"
     {
       buildInputs = [
@@ -40,10 +38,4 @@ in
     touch $out
   '';
 
-  checksTest = mkOutputTest "checks" // {
-    # debug the fullFLake through repl at checks.<system>.checksTest.fullFlake
-    inherit fullFlake;
-  };
-
-  devShellTest = fullFlake.devShell.${pkgs.system};
 }

@@ -5,9 +5,11 @@
         "flake-compat": "flake-compat",
         "naersk": "naersk",
         "nixpkgs": [
+          "digga",
           "nixpkgs"
         ],
         "utils": [
+          "digga",
           "utils"
         ]
       },
@@ -38,6 +40,27 @@
         "owner": "numtide",
         "repo": "devshell",
         "type": "github"
+      }
+    },
+    "digga": {
+      "inputs": {
+        "deploy": "deploy",
+        "devshell": "devshell",
+        "nixlib": "nixlib",
+        "nixos-generators": "nixos-generators",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "utils": "utils"
+      },
+      "locked": {
+        "narHash": "sha256-BimhA1sw5W+BnMdLfVrMS+WVDv3vi73OlRCyQI+xQkU=",
+        "path": "../",
+        "type": "path"
+      },
+      "original": {
+        "path": "../",
+        "type": "path"
       }
     },
     "flake-compat": {
@@ -74,6 +97,7 @@
     "naersk": {
       "inputs": {
         "nixpkgs": [
+          "digga",
           "nixpkgs"
         ]
       },
@@ -110,6 +134,7 @@
     "nixos-generators": {
       "inputs": {
         "nixpkgs": [
+          "digga",
           "nixpkgs"
         ]
       },
@@ -129,27 +154,22 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1624148921,
-        "narHash": "sha256-FAhKTXZV67C36hK5lPvZfsFt+QY1QSHYQXwGXqpOChs=",
-        "owner": "nixos",
+        "lastModified": 1624300589,
+        "narHash": "sha256-anxKmaq18nWRzrgbPOajbjuq1cqsqgSsj1LTwU+7oQ4=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "f2122ea5815648effdd97157c7bf4e9a1a6dbb34",
+        "rev": "38d369643e49043923a6d0e66e60b7fe54291d69",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "type": "github"
+        "id": "nixpkgs",
+        "type": "indirect"
       }
     },
     "root": {
       "inputs": {
-        "deploy": "deploy",
-        "devshell": "devshell",
-        "nixlib": "nixlib",
-        "nixos-generators": "nixos-generators",
-        "nixpkgs": "nixpkgs",
-        "utils": "utils"
+        "digga": "digga",
+        "nixpkgs": "nixpkgs"
       }
     },
     "utils": {
