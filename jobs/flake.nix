@@ -15,9 +15,12 @@
     # Super Stupid Flakes / System As an Input - Style:
     supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin"];
     ufrContract = import ../ufr-polyfills/ufrContract.nix;
+    patch = import ../ufr-polyfills/patch.nix;
+
+    nixpkgs = builtins.trace inputs.nixpkgs patch "x86_64-linux" inputs.nixpkgs [];
 
     # Dependency Groups - Style
-    jobsInputs = { inherit nixpkgs digga; };
+    jobsInputs = builtins.trace nixpkgs { inherit nixpkgs digga; };
 
     # .. we hope you like this style.
     # .. it's adopted by a growing number of projects.
