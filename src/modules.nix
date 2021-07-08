@@ -33,7 +33,8 @@
           # always use the system nixpkgs from the host's channel
           useGlobalPkgs = true;
           # and use the possible future default (see manual)
-          useUserPackages = lib.mkDefault true;
+          # mkForce so that deploy-rs' profilePath is well-known
+          useUserPackages = lib.mkForce true;
 
           extraSpecialArgs = specialArgs;
           sharedModules = modules;

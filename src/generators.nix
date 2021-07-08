@@ -1,5 +1,44 @@
 { lib, deploy }:
 {
+  mkDeployNodes = nixosConfigurations: extraConfig:
+    /**
+      Synopsis: mkDeployNodes _nixosConfigurations_ _extraConfig_
+
+      Generate the `nodes` attribute expected by deploy-rs
+      where _nixosConfigurations_ are `nodes`.
+      **/
+    let
+      op = _: host:
+        let
+          activate = deploy.lib.${host.config.nixpkgs.system}.activate;
+          hm-profiles = (n: v: {
+            user = n;
+            profilePath = "/nix/var/nix/profiles/per-user/${n}/home-manager";
+            path = activate.home-manager v.home;
+          });
+        in
+        {
+          hostname = host.config.networking.hostName;
+          profiles =
+            {
+              system = {
+                user = "root";
+                path = activate.nixos host;
+              };
+            }
+            //
+            (
+              builtins.mapAttrs
+                hm-profiles
+                host.config.home-manager.users
+            )
+          ;
+        }
+      ;
+    in
+    lib.recursiveUpdate (lib.mapAttrs op nixosConfigurations) extraConfig
+  ;
+
   mkHomeConfigurations = nixosConfigurations:
     /**
       Synopsis: mkHomeConfigurations _nixosConfigurations_
@@ -9,12 +48,12 @@
       _user@hostname_.
       **/
     let
-      op = attrs: c:
+      op = attrs: host:
         attrs
         //
         (
           let
-            net = c.config.networking;
+            net = host.config.networking;
             fqdn =
               if net.domain != null
               then "${net.hostName}.${net.domain}"
@@ -25,31 +64,11 @@
               name = "${user}@${fqdn}";
               value = v.home;
             })
-            c.config.home-manager.users
+            host.config.home-manager.users
         )
       ;
       mkHmConfigs = lib.foldl op { };
     in
     mkHmConfigs (builtins.attrValues nixosConfigurations);
 
-  mkDeployNodes = hosts: extraConfig:
-    /**
-      Synopsis: mkNodes _nixosConfigurations_
-
-      Generate the `nodes` attribute expected by deploy-rs
-      where _nixosConfigurations_ are `nodes`.
-      **/
-
-    lib.mapAttrs
-      (_: config: lib.recursiveUpdate
-        {
-          hostname = config.config.networking.hostName;
-
-          profiles.system = {
-            user = "root";
-            path = deploy.lib.${config.config.nixpkgs.system}.activate.nixos config;
-          };
-        }
-        extraConfig)
-      hosts;
 }
