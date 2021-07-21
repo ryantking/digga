@@ -1,0 +1,568 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Digga Library Docs</title>
+                <meta name="robots" content="noindex" />
+                
+
+        <!-- Custom HTML head -->
+        
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+                <link rel="icon" href="favicon.svg">
+                        <link rel="shortcut icon" href="favicon.png">
+                <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+                <link rel="stylesheet" href="css/print.css" media="print">
+        
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+                <link rel="stylesheet" href="fonts/fonts.css">
+        
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+            </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="api-reference.html"><strong aria-hidden="true">2.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api-reference-channels.html"><strong aria-hidden="true">2.1.</strong> Channels</a></li><li class="chapter-item expanded "><a href="api-reference-home.html"><strong aria-hidden="true">2.2.</strong> Home</a></li><li class="chapter-item expanded "><a href="api-reference-devshell.html"><strong aria-hidden="true">2.3.</strong> Devshell</a></li><li class="chapter-item expanded "><a href="api-reference-nixos.html"><strong aria-hidden="true">2.4.</strong> Nixos</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Library Reference</div></li><li class="chapter-item expanded "><a href="CONTRIBUTING.html"><strong aria-hidden="true">4.</strong> Contributing</a></li></ol>            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                                                <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                                            </div>
+
+                    <h1 class="menu-title">Digga Library Docs</h1>
+
+                    <div class="right-buttons">
+                                                <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                                                                        
+                    </div>
+                </div>
+
+                                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p><a href="https://app.bors.tech/repositories/33905"><img src="https://bors.tech/images/badge_small.svg" alt="Bors enabled" /></a>
+<a href="https://mit-license.org"><img src="https://img.shields.io/github/license/divnix/devos" alt="MIT License" /></a>
+<a href="https://nixos.org"><img src="https://img.shields.io/badge/NixOS-unstable-blue.svg?style=flat&amp;logo=NixOS&amp;logoColor=white" alt="NixOS" /></a>
+<a href="https://matrix.to/#/#devos:nixos.org"><img src="https://img.shields.io/badge/chat-join%20us-brightgreen.svg?style=flat&amp;logo=matrix&amp;logoColor=white" alt="Chat" /></a></p>
+<blockquote>
+<h4 id="-advisory-"><a class="header" href="#-advisory-">⚠ Advisory ⚠</a></h4>
+<p>Digga requires the <a href="https://nixos.wiki/wiki/Flakes">flakes</a> feature available via an <em>experimental</em>
+branch of <a href="https://nixos.org/manual/nix/stable">nix</a>. Until nix 3.0 is released, this project
+should be considered unstable, though quite usable as flakes have been
+maturing <em>well</em> for a while.</p>
+</blockquote>
+<p>Digga — slangy german for &quot;good friend&quot; — is a flake utility library
+that helps you declaratively craft and manage all three layers of your system
+environment within a single <a href="https://nixos.wiki/wiki/Flakes">nix flakes</a> repository:</p>
+<ul>
+<li>development shells (via <a href="https://github.com/numtide/devshell"><code>numtide/devshell</code></a>),</li>
+<li>home environments (via <a href="https://github.com/nix-community/home-manager"><code>nix-community/home-manager</code></a>), and</li>
+<li>host configurations (via <a href="https://github.com/nixos/nixpkgs"><code>NixOS/nixpkgs/nixos</code></a>).</li>
+</ul>
+<p>This library is based on <a href="https://github.com/gytis-ivaskevicius/flake-utils-plus">flake-utils-plus</a>.</p>
+<h1 id="usage"><a class="header" href="#usage">Usage</a></h1>
+<p>The best way to make use of library is with the <a href="https://github.com/divnix/devos">Official template</a>.</p>
+<p>You can also have a look at the different <a href="https://github.com/divnix/digga/tree/main/examples">examples</a>.</p>
+<h1 id="philosophy"><a class="header" href="#philosophy">Philosophy</a></h1>
+<p>In it's <code>lib.mkFlake</code> function, <em>digga</em> implements a well-secified API
+interface comprising four API containers that allow you to:</p>
+<ol>
+<li>
+<p>configure <strong>nixpkgs channels</strong> including internal and external overlays,</p>
+</li>
+<li>
+<p>define <strong>nixos hosts</strong> including internal and external nixos modules as well as
+host defaults that apply to all hosts in the environment,</p>
+</li>
+<li>
+<p>specify <strong>user home environments</strong> including internal and external home-manager
+modules, and</p>
+</li>
+<li>
+<p>setup &amp; combine a series of <strong>devshells</strong> that you like to have available in
+your projects.</p>
+</li>
+</ol>
+<h2 id="modules-profiles--suites"><a class="header" href="#modules-profiles--suites">Modules, Profiles &amp; Suites</a></h2>
+<p>For nixos- &amp; home-manager-modules, <em>digga</em> allows you to distinguish between
+<em>modules</em>, <em>profiles</em> and <em>suites</em>.</p>
+<ul>
+<li>
+<p><strong>Modules</strong> are abstract configurations that, while holding the implementation, do not
+set any system state.</p>
+</li>
+<li>
+<p><strong>Profiles</strong> are concrete configurations that set system state within the profile domain.</p>
+</li>
+<li>
+<p><strong>Suites</strong> are a composable, clean and discoverable mechanism for profile aggregation.</p>
+</li>
+</ul>
+<h2 id="internal-art-vs-external-art"><a class="header" href="#internal-art-vs-external-art">Internal Art vs External Art</a></h2>
+<p>Overlays and modules can be defined internally coming form your repo or externally
+coming from an upstream flake. This distinction serves the library to only export
+your own work as the public flake output.</p>
+<p>Downstream consumers of your flake can now more easily tell your art apart from
+other upstream art.</p>
+<h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
+<p>We encourage contributions of any kind. The simplest way to get involved is to
+join the <a href="https://matrix.to/#/#devos:nixos.org">chat</a> or report problems and ideas on the <a href="https://github.com/divnix/digga/issues">issue thread</a>.</p>
+<p>To craft well thought out APIs we need all the thoughts regarding new ideas.</p>
+<p>Pull Requests are just as amazing.</p>
+<h1 id="license"><a class="header" href="#license">License</a></h1>
+<p>Digga is licensed under the <a href="https://mit-license.org">MIT License</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="top-level-api"><a class="header" href="#top-level-api">Top Level API</a></h1>
+<p><code>digga</code>'s top level api. API Containers are documented in their respective subchapter:</p>
+<ul>
+<li><a href="./api-reference-channels.html">Channels</a></li>
+<li><a href="./api-reference-home.html">Home</a></li>
+<li><a href="./api-reference-devshell.html">Devshell</a></li>
+<li><a href="./api-reference-nixos.html">Nixos</a></li>
+</ul>
+<h2 id="channelsconfig"><a class="header" href="#channelsconfig">channelsConfig</a></h2>
+<p>nixpkgs config for all channels</p>
+<p><em><em>Type</em></em>:
+attribute set or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="inputs"><a class="header" href="#inputs">inputs</a></h2>
+<p>The flake's inputs</p>
+<p><em><em>Type</em></em>:
+attribute set of nix flakes</p>
+<h2 id="outputsbuilder"><a class="header" href="#outputsbuilder">outputsBuilder</a></h2>
+<p>builder for flake system-spaced outputs
+The builder gets passed an attrset of all channels</p>
+<p><em><em>Type</em></em>:
+function that evaluates to a(n) attrs or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;channels: { }&quot;
+</code></pre>
+<h2 id="self"><a class="header" href="#self">self</a></h2>
+<p>The flake to create the devos outputs for</p>
+<p><em><em>Type</em></em>:
+nix flake</p>
+<h2 id="supportedsystems"><a class="header" href="#supportedsystems">supportedSystems</a></h2>
+<p>The systems supported by this flake</p>
+<p><em><em>Type</em></em>:
+list of strings</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;aarch64-linux&quot;,&quot;i686-linux&quot;,&quot;x86_64-darwin&quot;,&quot;x86_64-linux&quot;]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="channels-api-container"><a class="header" href="#channels-api-container">Channels API Container</a></h1>
+<p>Configure your channels that you can use throughout your configurations.</p>
+<blockquote>
+<h4 id="-gotcha-"><a class="header" href="#-gotcha-">⚠ Gotcha ⚠</a></h4>
+<p>Devshell &amp; Home-Manager <code>pkgs</code> instances are rendered off the
+<code>nixos.hostDefaults.channelName</code> (default) channel.</p>
+</blockquote>
+<h2 id="channels"><a class="header" href="#channels">channels</a></h2>
+<p>nixpkgs channels to create</p>
+<p><em><em>Type</em></em>:
+attribute set of submodules or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="channelsnameconfig"><a class="header" href="#channelsnameconfig">channels.&lt;name&gt;.config</a></h2>
+<p>nixpkgs config for this channel</p>
+<p><em><em>Type</em></em>:
+attribute set or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="channelsnameinput"><a class="header" href="#channelsnameinput">channels.&lt;name&gt;.input</a></h2>
+<p>nixpkgs flake input to use for this channel</p>
+<p><em><em>Type</em></em>:
+nix flake</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;config.self.inputs.&lt;name&gt;&quot;
+</code></pre>
+<h2 id="channelsnameoverlays"><a class="header" href="#channelsnameoverlays">channels.&lt;name&gt;.overlays</a></h2>
+<p>overlays to apply to this channel
+these will get exported under the 'overlays' flake output
+as &lt;channel&gt;/&lt;name&gt; and any overlay pulled from ${inputs}
+will be filtered out</p>
+<p><em><em>Type</em></em>:
+list of valid Nixpkgs overlay or path convertible to its or anything convertible to it or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="home-manager-api-container"><a class="header" href="#home-manager-api-container">Home-Manager API Container</a></h1>
+<p>Configure your home manager modules, profiles &amp; suites.</p>
+<h2 id="home"><a class="header" href="#home">home</a></h2>
+<p>hosts, modules, suites, and profiles for home-manager</p>
+<p><em><em>Type</em></em>:
+submodule or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="homeexternalmodules"><a class="header" href="#homeexternalmodules">home.externalModules</a></h2>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="homeimportables"><a class="header" href="#homeimportables">home.importables</a></h2>
+<p>Packages of paths to be passed to modules as <code>specialArgs</code>.</p>
+<p><em><em>Type</em></em>:
+attribute set</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="homeimportablessuites"><a class="header" href="#homeimportablessuites">home.importables.suites</a></h2>
+<p>collections of profiles</p>
+<p><em><em>Type</em></em>:
+null or attribute set of list of paths or anything convertible to its or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="homemodules"><a class="header" href="#homemodules">home.modules</a></h2>
+<p>modules to include in all hosts and export to homeModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="homeprofiles"><a class="header" href="#homeprofiles">home.profiles</a></h2>
+<p>WARNING: The 'suites' and <code>profiles</code> options have been deprecated, you can now create
+both with the importables option. <code>rakeLeaves</code> can be used to create profiles and
+by passing a module or <code>rec</code> set to <code>importables</code>, suites can access profiles.
+Example:</p>
+<pre><code>importables = rec {
+  profiles = digga.lib.rakeLeaves ./profiles;
+  suites = with profiles; { };
+}
+</code></pre>
+<p>See https://github.com/divnix/digga/pull/30 for more details</p>
+<p><em><em>Type</em></em>:
+list of paths or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="homesuites"><a class="header" href="#homesuites">home.suites</a></h2>
+<p>WARNING: The 'suites' and <code>profiles</code> options have been deprecated, you can now create
+both with the importables option. <code>rakeLeaves</code> can be used to create profiles and
+by passing a module or <code>rec</code> set to <code>importables</code>, suites can access profiles.
+Example:</p>
+<pre><code>importables = rec {
+  profiles = digga.lib.rakeLeaves ./profiles;
+  suites = with profiles; { };
+}
+</code></pre>
+<p>See https://github.com/divnix/digga/pull/30 for more details</p>
+<p><em><em>Type</em></em>:
+function that evaluates to a(n) attrs or path convertible to it</p>
+<h2 id="homeusers"><a class="header" href="#homeusers">home.users</a></h2>
+<p>HM users that can be deployed portably without a host.</p>
+<p><em><em>Type</em></em>:
+attribute set of hm user configs</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="devshell-api-container"><a class="header" href="#devshell-api-container">Devshell API Container</a></h1>
+<p>Configure your devshell module collections of your environment.</p>
+<h2 id="devshell"><a class="header" href="#devshell">devshell</a></h2>
+<p>Modules to include in your devos shell. the <code>modules</code> argument
+will be exported under the <code>devshellModules</code> output</p>
+<p><em><em>Type</em></em>:
+submodule or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="devshellexternalmodules"><a class="header" href="#devshellexternalmodules">devshell.externalModules</a></h2>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="devshellmodules"><a class="header" href="#devshellmodules">devshell.modules</a></h2>
+<p>modules to include in all hosts and export to devshellModules output</p>
+<p><em><em>Type</em></em>:
+list of valid module or path convertible to its or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="nixos-api-container"><a class="header" href="#nixos-api-container">NixOS API Container</a></h1>
+<p>Configure your nixos modules, profiles &amp; suites.</p>
+<h2 id="nixos"><a class="header" href="#nixos">nixos</a></h2>
+<p>hosts, modules, suites, and profiles for nixos</p>
+<p><em><em>Type</em></em>:
+submodule or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="nixoshostdefaults"><a class="header" href="#nixoshostdefaults">nixos.hostDefaults</a></h2>
+<p>Defaults for all hosts.
+the modules passed under hostDefaults will be exported
+to the 'nixosModules' flake output.
+They will also be added to all hosts.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="nixoshostdefaultschannelname"><a class="header" href="#nixoshostdefaultschannelname">nixos.hostDefaults.channelName</a></h2>
+<p>Channel this host should follow</p>
+<p><em><em>Type</em></em>:
+channel defined in <code>channels</code></p>
+<h2 id="nixoshostdefaultsexternalmodules"><a class="header" href="#nixoshostdefaultsexternalmodules">nixos.hostDefaults.externalModules</a></h2>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="nixoshostdefaultsmodules"><a class="header" href="#nixoshostdefaultsmodules">nixos.hostDefaults.modules</a></h2>
+<p>modules to include in all hosts and export to nixosModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="nixoshostdefaultssystem"><a class="header" href="#nixoshostdefaultssystem">nixos.hostDefaults.system</a></h2>
+<p>system for this host</p>
+<p><em><em>Type</em></em>:
+null or system defined in <code>supportedSystems</code></p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="nixoshosts"><a class="header" href="#nixoshosts">nixos.hosts</a></h2>
+<p>configurations to include in the nixosConfigurations output</p>
+<p><em><em>Type</em></em>:
+attribute set of submodules</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="nixoshostsnamechannelname"><a class="header" href="#nixoshostsnamechannelname">nixos.hosts.&lt;name&gt;.channelName</a></h2>
+<p>Channel this host should follow</p>
+<p><em><em>Type</em></em>:
+null or channel defined in <code>channels</code></p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="nixoshostsnamemodules"><a class="header" href="#nixoshostsnamemodules">nixos.hosts.&lt;name&gt;.modules</a></h2>
+<p>modules to include</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="nixoshostsnamesystem"><a class="header" href="#nixoshostsnamesystem">nixos.hosts.&lt;name&gt;.system</a></h2>
+<p>system for this host</p>
+<p><em><em>Type</em></em>:
+null or system defined in <code>supportedSystems</code></p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="nixosimportables"><a class="header" href="#nixosimportables">nixos.importables</a></h2>
+<p>Packages of paths to be passed to modules as <code>specialArgs</code>.</p>
+<p><em><em>Type</em></em>:
+attribute set</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="nixosimportablessuites"><a class="header" href="#nixosimportablessuites">nixos.importables.suites</a></h2>
+<p>collections of profiles</p>
+<p><em><em>Type</em></em>:
+null or attribute set of list of paths or anything convertible to its or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="nixosprofiles"><a class="header" href="#nixosprofiles">nixos.profiles</a></h2>
+<p>WARNING: The 'suites' and <code>profiles</code> options have been deprecated, you can now create
+both with the importables option. <code>rakeLeaves</code> can be used to create profiles and
+by passing a module or <code>rec</code> set to <code>importables</code>, suites can access profiles.
+Example:</p>
+<pre><code>importables = rec {
+  profiles = digga.lib.rakeLeaves ./profiles;
+  suites = with profiles; { };
+}
+</code></pre>
+<p>See https://github.com/divnix/digga/pull/30 for more details</p>
+<p><em><em>Type</em></em>:
+list of paths or path convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="nixossuites"><a class="header" href="#nixossuites">nixos.suites</a></h2>
+<p>WARNING: The 'suites' and <code>profiles</code> options have been deprecated, you can now create
+both with the importables option. <code>rakeLeaves</code> can be used to create profiles and
+by passing a module or <code>rec</code> set to <code>importables</code>, suites can access profiles.
+Example:</p>
+<pre><code>importables = rec {
+  profiles = digga.lib.rakeLeaves ./profiles;
+  suites = with profiles; { };
+}
+</code></pre>
+<p>See https://github.com/divnix/digga/pull/30 for more details</p>
+<p><em><em>Type</em></em>:
+function that evaluates to a(n) attrs or path convertible to it</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tldr"><a class="header" href="#tldr">TL;DR;</a></h1>
+<ul>
+<li><strong>Target Branch</strong>: <code>main</code></li>
+<li><strong>Merge Policy</strong>: <a href="https://bors.tech"><code>bors</code></a> is alwyas right (→ <code>bors try</code>)</li>
+<li><strong>Docs</strong>: every changeset is expected to contain doc updates</li>
+<li><strong>Commit Msg</strong>: be a poet! Comprehensive and explanatory commit messages 
+should cover the motivation and use case in an easily understandable manner
+even when read after a few months.</li>
+<li><strong>Test Driven Development</strong>: please default to test driven development you can
+make use of the <code>./examples</code> &amp; <code>./e2e</code> and wire test up in the devshell. </li>
+</ul>
+<h3 id="within-the-devshell-nix-develop"><a class="header" href="#within-the-devshell-nix-develop">Within the Devshell (<code>nix develop</code>)</a></h3>
+<ul>
+<li><strong>Hooks</strong>: please <code>git commit</code> within the devshell</li>
+<li><strong>Fail Early</strong>: please run <code>check-all</code> from within the devshell on your local machine</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                        
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                            </nav>
+
+        </div>
+
+        
+        
+        
+                <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+        
+                <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+                        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+                
+    </body>
+</html>
