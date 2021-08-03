@@ -216,6 +216,16 @@ null or system defined in <code>supportedSystems</code></p>
 <p><em><em>Default</em></em></p>
 <pre><code>null
 </code></pre>
+<h2 id="nixoshostsnametests"><a class="header" href="#nixoshostsnametests">nixos.hosts.&lt;name&gt;.tests</a></h2>
+<p>tests to run</p>
+<p><em><em>Type</em></em>:
+list of valid nixos test or path convertible to its or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;literalExample&quot;,&quot;text&quot;:&quot;[\n  {\n    name = \&quot;testname1\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  }\n  ({ corutils, writers, ... }: {\n    name = \&quot;testname2\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  })\n  ./path/to/test.nix\n];\n&quot;}
+</code></pre>
 <h2 id="nixosimportables"><a class="header" href="#nixosimportables">nixos.importables</a></h2>
 <p>Packages of paths to be passed to modules as <code>specialArgs</code>.</p>
 <p><em><em>Type</em></em>:
