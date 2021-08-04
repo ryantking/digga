@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="api-reference.html"><strong aria-hidden="true">2.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api-reference-channels.html"><strong aria-hidden="true">2.1.</strong> Channels</a></li><li class="chapter-item expanded "><a href="api-reference-home.html"><strong aria-hidden="true">2.2.</strong> Home</a></li><li class="chapter-item expanded "><a href="api-reference-devshell.html"><strong aria-hidden="true">2.3.</strong> Devshell</a></li><li class="chapter-item expanded "><a href="api-reference-nixos.html"><strong aria-hidden="true">2.4.</strong> Nixos</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Library Reference</div></li><li class="chapter-item expanded "><a href="CONTRIBUTING.html"><strong aria-hidden="true">4.</strong> Contributing</a></li></ol>            </div>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="api-reference.html"><strong aria-hidden="true">2.</strong> API Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api-reference-channels.html"><strong aria-hidden="true">2.1.</strong> Channels</a></li><li class="chapter-item expanded "><a href="api-reference-home.html"><strong aria-hidden="true">2.2.</strong> Home</a></li><li class="chapter-item expanded "><a href="api-reference-devshell.html"><strong aria-hidden="true">2.3.</strong> Devshell</a></li><li class="chapter-item expanded "><a href="api-reference-nixos.html"><strong aria-hidden="true">2.4.</strong> NixOS</a></li></ol></li><li class="chapter-item expanded "><div><strong aria-hidden="true">3.</strong> Library Reference</div></li><li class="chapter-item expanded "><a href="CONTRIBUTING.html"><strong aria-hidden="true">4.</strong> Contributing</a></li></ol>            </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
 
@@ -155,7 +155,7 @@ branch of <a href="https://nixos.org/manual/nix/stable">nix</a>. Until nix 3.0 i
 should be considered unstable, though quite usable as flakes have been
 maturing <em>well</em> for a while.</p>
 </blockquote>
-<p>Digga — slangy german for &quot;good friend&quot; — is a flake utility library
+<p>Digga — slangy German for &quot;good friend&quot; — is a flake utility library
 that helps you declaratively craft and manage all three layers of your system
 environment within a single <a href="https://nixos.wiki/wiki/Flakes">nix flakes</a> repository:</p>
 <ul>
@@ -168,14 +168,14 @@ environment within a single <a href="https://nixos.wiki/wiki/Flakes">nix flakes<
 <p>The best way to make use of library is with the <a href="https://github.com/divnix/devos">Official template</a>.</p>
 <p>You can also have a look at the different <a href="https://github.com/divnix/digga/tree/main/examples">examples</a>.</p>
 <h1 id="philosophy"><a class="header" href="#philosophy">Philosophy</a></h1>
-<p>In it's <code>lib.mkFlake</code> function, <em>digga</em> implements a well-secified API
+<p>In it's <code>lib.mkFlake</code> function, <em>Digga</em> implements a well-specified API
 interface comprising four API containers that allow you to:</p>
 <ol>
 <li>
 <p>configure <strong>nixpkgs channels</strong> including internal and external overlays,</p>
 </li>
 <li>
-<p>define <strong>nixos hosts</strong> including internal and external nixos modules as well as
+<p>define <strong>NixOS hosts</strong> including internal and external NixOS modules as well as
 host defaults that apply to all hosts in the environment,</p>
 </li>
 <li>
@@ -188,7 +188,7 @@ your projects.</p>
 </li>
 </ol>
 <h2 id="modules-profiles--suites"><a class="header" href="#modules-profiles--suites">Modules, Profiles &amp; Suites</a></h2>
-<p>For nixos- &amp; home-manager-modules, <em>digga</em> allows you to distinguish between
+<p>For NixOS- &amp; home-manager-modules, <em>Digga</em> allows you to distinguish between
 <em>modules</em>, <em>profiles</em> and <em>suites</em>.</p>
 <ul>
 <li>
@@ -216,12 +216,12 @@ join the <a href="https://matrix.to/#/#devos:nixos.org">chat</a> or report probl
 <h1 id="license"><a class="header" href="#license">License</a></h1>
 <p>Digga is licensed under the <a href="https://mit-license.org">MIT License</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="top-level-api"><a class="header" href="#top-level-api">Top Level API</a></h1>
-<p><code>digga</code>'s top level api. API Containers are documented in their respective subchapter:</p>
+<p><code>digga</code>'s top level API. API Containers are documented in their respective sub-chapter:</p>
 <ul>
 <li><a href="./api-reference-channels.html">Channels</a></li>
 <li><a href="./api-reference-home.html">Home</a></li>
 <li><a href="./api-reference-devshell.html">Devshell</a></li>
-<li><a href="./api-reference-nixos.html">Nixos</a></li>
+<li><a href="./api-reference-nixos.html">NixOS</a></li>
 </ul>
 <h2 id="channelsconfig"><a class="header" href="#channelsconfig">channelsConfig</a></h2>
 <p>nixpkgs config for all channels</p>
@@ -243,7 +243,7 @@ function that evaluates to a(n) attrs or path convertible to it</p>
 <pre><code>&quot;channels: { }&quot;
 </code></pre>
 <h2 id="self"><a class="header" href="#self">self</a></h2>
-<p>The flake to create the devos outputs for</p>
+<p>The flake to create the DevOS outputs for</p>
 <p><em><em>Type</em></em>:
 nix flake</p>
 <h2 id="supportedsystems"><a class="header" href="#supportedsystems">supportedSystems</a></h2>
@@ -361,14 +361,14 @@ function that evaluates to a(n) attrs or path convertible to it</p>
 <h2 id="homeusers"><a class="header" href="#homeusers">home.users</a></h2>
 <p>HM users that can be deployed portably without a host.</p>
 <p><em><em>Type</em></em>:
-attribute set of hm user configs</p>
+attribute set of HM user configs</p>
 <p><em><em>Default</em></em></p>
 <pre><code>{}
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="devshell-api-container"><a class="header" href="#devshell-api-container">Devshell API Container</a></h1>
 <p>Configure your devshell module collections of your environment.</p>
 <h2 id="devshell"><a class="header" href="#devshell">devshell</a></h2>
-<p>Modules to include in your devos shell. the <code>modules</code> argument
+<p>Modules to include in your DevOS shell. the <code>modules</code> argument
 will be exported under the <code>devshellModules</code> output</p>
 <p><em><em>Type</em></em>:
 submodule or path convertible to it</p>
@@ -391,9 +391,9 @@ list of valid module or path convertible to its or anything convertible to it</p
 <pre><code>[]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="nixos-api-container"><a class="header" href="#nixos-api-container">NixOS API Container</a></h1>
-<p>Configure your nixos modules, profiles &amp; suites.</p>
-<h2 id="nixos"><a class="header" href="#nixos">nixos</a></h2>
-<p>hosts, modules, suites, and profiles for nixos</p>
+<p>Configure your NixOS modules, profiles &amp; suites.</p>
+<h2 id="nixos"><a class="header" href="#nixos">NixOS</a></h2>
+<p>hosts, modules, suites, and profiles for NixOS</p>
 <p><em><em>Type</em></em>:
 submodule or path convertible to it</p>
 <p><em><em>Default</em></em></p>
@@ -466,7 +466,7 @@ null or system defined in <code>supportedSystems</code></p>
 <h2 id="nixoshostsnametests"><a class="header" href="#nixoshostsnametests">nixos.hosts.&lt;name&gt;.tests</a></h2>
 <p>tests to run</p>
 <p><em><em>Type</em></em>:
-list of valid nixos test or path convertible to its or anything convertible to it</p>
+list of valid NixOS test or path convertible to its or anything convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
@@ -519,8 +519,8 @@ function that evaluates to a(n) attrs or path convertible to it</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tldr"><a class="header" href="#tldr">TL;DR;</a></h1>
 <ul>
 <li><strong>Target Branch</strong>: <code>main</code></li>
-<li><strong>Merge Policy</strong>: <a href="https://bors.tech"><code>bors</code></a> is alwyas right (→ <code>bors try</code>)</li>
-<li><strong>Docs</strong>: every changeset is expected to contain doc updates</li>
+<li><strong>Merge Policy</strong>: <a href="https://bors.tech"><code>bors</code></a> is always right (→ <code>bors try</code>)</li>
+<li><strong>Docs</strong>: every change set is expected to contain doc updates</li>
 <li><strong>Commit Msg</strong>: be a poet! Comprehensive and explanatory commit messages 
 should cover the motivation and use case in an easily understandable manner
 even when read after a few months.</li>
