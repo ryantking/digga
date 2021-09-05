@@ -49,9 +49,8 @@ channel defined in `channels`
 
 
 
-## nixos.hostDefaults.externalModules
-modules to include that won't be exported
-meant importing modules from external flakes
+## nixos.hostDefaults.modules
+modules to include in all hosts and export to nixosModules output
 
 
 *_Type_*:
@@ -66,8 +65,9 @@ list of valid modules or anything convertible to it
 
 
 
-## nixos.hostDefaults.modules
-modules to include in all hosts and export to nixosModules output
+## nixos.hostDefaults.nonExportedModules
+modules to include that won't be exported
+meant importing modules e.g. from external flakes
 
 
 *_Type_*:

@@ -20,7 +20,7 @@ let
     home-manager.lib.homeManagerConfiguration {
       inherit username homeDirectory pkgs system;
 
-      extraModules = config.home.modules ++ config.home.externalModules;
+      extraModules = config.home.modules ++ config.home.nonExportedModules;
       extraSpecialArgs = config.home.importables;
 
       configuration = {
@@ -53,7 +53,7 @@ in
       eval = import "${devshell}/modules" pkgs;
       configuration = {
         name = lib.mkDefault config.nixos.hostDefaults.channelName;
-        imports = config.devshell.modules ++ config.devshell.externalModules;
+        imports = config.devshell.modules ++ config.devshell.nonExportedModules;
       };
     in
     (eval {

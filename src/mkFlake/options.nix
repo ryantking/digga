@@ -198,13 +198,23 @@ let
 
   # This is only needed for hostDefaults
   # modules in each host don't get exported
-  externalModulesOpt = {
+  nonExportedModulesOpt = {
+    nonExportedModules = mkOption {
+      type = with types; modulesType;
+      default = [ ];
+      description = ''
+        modules to include that won't be exported
+        meant importing modules e.g. from external flakes
+      '';
+    };
+  };
+  legacyExternalModulesOpt = {
     externalModules = mkOption {
       type = with types; modulesType;
       default = [ ];
       description = ''
         modules to include that won't be exported
-        meant importing modules from external flakes
+        meant importing modules e.g. from external flakes
       '';
     };
   };
@@ -342,6 +352,13 @@ let
   # Aggreagate types
   # #############
 
+  externalModulesDeprecationMessage = v:
+    lib.warn ''
+      the option 'externalModules' has been renamed to 'nonExportedModules'.
+      Please grep your codebase and rename.
+    ''
+    v;
+
   hostType = with types; attrsOf (submoduleWith {
     modules = [
       # per-host modules not exported, no external modules
@@ -351,7 +368,14 @@ let
 
   hostDefaultsType = name: with types; submoduleWith {
     modules = [
-      { options = systemOpt // (channelNameOpt true) // externalModulesOpt // (exportedModulesOpt name); }
+      { options = systemOpt // (channelNameOpt true) // nonExportedModulesOpt // (exportedModulesOpt name); }
+      # TODO: remove backward compat
+      ({ options, config, ... }: {
+        options = legacyExternalModulesOpt;
+        config = mkIf options.externalModules.isDefined {
+          nonExportedModules = externalModulesDeprecationMessage config.externalModules;
+        };
+      })
     ];
   };
 
@@ -359,6 +383,7 @@ let
     specialArgs = { inherit self inputs; };
     modules = [
       { options = (hostsOpt "nixos") // (hostDefaultsOpt "nixos") // importablesOpt; }
+      # TODO: remove backward compat
       legacyImportablesMod
     ];
   };
@@ -366,7 +391,14 @@ let
   homeType = with types; submoduleWith {
     specialArgs = { inherit self inputs; };
     modules = [
-      { options = externalModulesOpt // (exportedModulesOpt "home") // importablesOpt // usersOpt; }
+      { options =  nonExportedModulesOpt // (exportedModulesOpt "home") // importablesOpt // usersOpt; }
+      # TODO: remove backward compat
+      ({ options, config, ... }: {
+        options = legacyExternalModulesOpt;
+        config = mkIf options.externalModules.isDefined {
+          nonExportedModules = externalModulesDeprecationMessage config.externalModules;
+        };
+      })
       legacyImportablesMod
     ];
   };
@@ -374,7 +406,14 @@ let
   devshellType = with types; submoduleWith {
     specialArgs = { inherit self inputs; };
     modules = [
-      { options = externalModulesOpt // exportedDevshellModulesOpt; }
+      { options =  nonExportedModulesOpt // exportedDevshellModulesOpt; }
+      # TODO: remove backward compat
+      ({ options, config, ... }: {
+        options = legacyExternalModulesOpt;
+        config = mkIf options.externalModules.isDefined {
+          nonExportedModules = externalModulesDeprecationMessage config.externalModules;
+        };
+      })
     ];
   };
 

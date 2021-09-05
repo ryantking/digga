@@ -19,13 +19,12 @@ submodule or path convertible to it
 
 
 
-## devshell.externalModules
-modules to include that won't be exported
-meant importing modules from external flakes
+## devshell.modules
+modules to include in all hosts and export to devshellModules output
 
 
 *_Type_*:
-list of valid modules or anything convertible to it
+list of valid module or path convertible to its or anything convertible to it
 
 
 *_Default_*
@@ -36,12 +35,13 @@ list of valid modules or anything convertible to it
 
 
 
-## devshell.modules
-modules to include in all hosts and export to devshellModules output
+## devshell.nonExportedModules
+modules to include that won't be exported
+meant importing modules e.g. from external flakes
 
 
 *_Type_*:
-list of valid module or path convertible to its or anything convertible to it
+list of valid modules or anything convertible to it
 
 
 *_Default_*

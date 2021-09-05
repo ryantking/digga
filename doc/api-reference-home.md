@@ -18,23 +18,6 @@ submodule or path convertible to it
 
 
 
-## home.externalModules
-modules to include that won't be exported
-meant importing modules from external flakes
-
-
-*_Type_*:
-list of valid modules or anything convertible to it
-
-
-*_Default_*
-```
-[]
-```
-
-
-
-
 ## home.importables
 Packages of paths to be passed to modules as `specialArgs`.
 
@@ -69,6 +52,23 @@ null
 
 ## home.modules
 modules to include in all hosts and export to homeModules output
+
+
+*_Type_*:
+list of valid modules or anything convertible to it
+
+
+*_Default_*
+```
+[]
+```
+
+
+
+
+## home.nonExportedModules
+modules to include that won't be exported
+meant importing modules e.g. from external flakes
 
 
 *_Type_*:

@@ -25,7 +25,7 @@ let
   defaultHostModules = [
     (internal-modules.hmNixosDefaults {
       specialArgs = config.home.importables;
-      modules = config.home.modules ++ config.home.externalModules;
+      modules = config.home.modules ++ config.home.nonExportedModules;
     })
     (internal-modules.globalDefaults {
       hmUsers = config.home.users;
@@ -53,8 +53,10 @@ let
   # but for proper default handling in fup, null args have to be removed
   stripHost = args: removeAttrs (lib.filterAttrs (_: arg: arg != null) args) [
     # arguments in our hosts/hostDefaults api that shouldn't be passed to fup
-    "externalModules"
+    "nonExportedModules"
     "tests"
+    # TODO: remove deprecation boilerplate
+    "externalModules"
   ];
 
   diggaFupArgs = {
@@ -79,7 +81,7 @@ let
     hostDefaults = flake-utils-plus.lib.mergeAny (stripHost config.nixos.hostDefaults) {
       # add `self` & `inputs` as specialargs so their libs can be used in imports
       specialArgs = config.nixos.importables // { inherit (config) self inputs; };
-      modules = config.nixos.hostDefaults.externalModules ++ defaultHostModules;
+      modules = config.nixos.hostDefaults.nonExportedModules ++ defaultHostModules;
     };
 
     nixosModules = flake-utils-plus.lib.exportModules config.nixos.hostDefaults.modules;

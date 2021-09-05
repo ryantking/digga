@@ -4,7 +4,7 @@ let
 in
 {
   imports = [ (lib.importModules ./modules) ];
-  externalModules = [ ];
+  nonExportedModules = [ ];
   importables = rec {
     profiles = lib.rakeLeaves ./profiles;
     suites = with profiles; {
