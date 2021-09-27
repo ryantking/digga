@@ -166,16 +166,25 @@ submodule</p>
 <p>Channel this host should follow</p>
 <p><em><em>Type</em></em>:
 channel defined in <code>channels</code></p>
+<h2 id="nixoshostdefaultsexportedmodules"><a class="header" href="#nixoshostdefaultsexportedmodules">nixos.hostDefaults.exportedModules</a></h2>
+<p>modules to include in all hosts and export to nixosModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="nixoshostdefaultsexternalmodules"><a class="header" href="#nixoshostdefaultsexternalmodules">nixos.hostDefaults.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
 <h2 id="nixoshostdefaultsmodules"><a class="header" href="#nixoshostdefaultsmodules">nixos.hostDefaults.modules</a></h2>
-<p>modules to include in all hosts and export to nixosModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>

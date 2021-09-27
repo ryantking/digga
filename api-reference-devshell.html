@@ -153,18 +153,27 @@ submodule or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>{}
 </code></pre>
+<h2 id="devshellexportedmodules"><a class="header" href="#devshellexportedmodules">devshell.exportedModules</a></h2>
+<p>modules to include in all hosts and export to devshellModules output</p>
+<p><em><em>Type</em></em>:
+list of valid module or path convertible to its or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="devshellexternalmodules"><a class="header" href="#devshellexternalmodules">devshell.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
 <h2 id="devshellmodules"><a class="header" href="#devshellmodules">devshell.modules</a></h2>
-<p>modules to include in all hosts and export to devshellModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
-list of valid module or path convertible to its or anything convertible to it</p>
+list of valid modules or anything convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>

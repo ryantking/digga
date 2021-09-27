@@ -300,9 +300,17 @@ submodule or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>{}
 </code></pre>
+<h2 id="homeexportedmodules"><a class="header" href="#homeexportedmodules">home.exportedModules</a></h2>
+<p>modules to include in all hosts and export to homeModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="homeexternalmodules"><a class="header" href="#homeexternalmodules">home.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
@@ -323,7 +331,8 @@ null or attribute set of list of paths or anything convertible to its or path co
 <pre><code>null
 </code></pre>
 <h2 id="homemodules"><a class="header" href="#homemodules">home.modules</a></h2>
-<p>modules to include in all hosts and export to homeModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
@@ -375,18 +384,27 @@ submodule or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>{}
 </code></pre>
+<h2 id="devshellexportedmodules"><a class="header" href="#devshellexportedmodules">devshell.exportedModules</a></h2>
+<p>modules to include in all hosts and export to devshellModules output</p>
+<p><em><em>Type</em></em>:
+list of valid module or path convertible to its or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="devshellexternalmodules"><a class="header" href="#devshellexternalmodules">devshell.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
 <h2 id="devshellmodules"><a class="header" href="#devshellmodules">devshell.modules</a></h2>
-<p>modules to include in all hosts and export to devshellModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
-list of valid module or path convertible to its or anything convertible to it</p>
+list of valid modules or anything convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
@@ -413,16 +431,25 @@ submodule</p>
 <p>Channel this host should follow</p>
 <p><em><em>Type</em></em>:
 channel defined in <code>channels</code></p>
+<h2 id="nixoshostdefaultsexportedmodules"><a class="header" href="#nixoshostdefaultsexportedmodules">nixos.hostDefaults.exportedModules</a></h2>
+<p>modules to include in all hosts and export to nixosModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="nixoshostdefaultsexternalmodules"><a class="header" href="#nixoshostdefaultsexternalmodules">nixos.hostDefaults.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>[]
 </code></pre>
 <h2 id="nixoshostdefaultsmodules"><a class="header" href="#nixoshostdefaultsmodules">nixos.hostDefaults.modules</a></h2>
-<p>modules to include in all hosts and export to nixosModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>

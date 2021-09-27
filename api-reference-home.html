@@ -152,9 +152,17 @@ submodule or path convertible to it</p>
 <p><em><em>Default</em></em></p>
 <pre><code>{}
 </code></pre>
+<h2 id="homeexportedmodules"><a class="header" href="#homeexportedmodules">home.exportedModules</a></h2>
+<p>modules to include in all hosts and export to homeModules output</p>
+<p><em><em>Type</em></em>:
+list of valid modules or anything convertible to it</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
 <h2 id="homeexternalmodules"><a class="header" href="#homeexternalmodules">home.externalModules</a></h2>
-<p>modules to include that won't be exported
-meant importing modules from external flakes</p>
+<p>ERROR: The <code>externalModules</code> option has been removed.
+Any modules that should be exported should be defined with the <code>exportedModules</code>
+option and all other modules should just go into the <code>modules</code> option.</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
@@ -175,7 +183,8 @@ null or attribute set of list of paths or anything convertible to its or path co
 <pre><code>null
 </code></pre>
 <h2 id="homemodules"><a class="header" href="#homemodules">home.modules</a></h2>
-<p>modules to include in all hosts and export to homeModules output</p>
+<p>modules to include that won't be exported
+meant importing modules from external flakes</p>
 <p><em><em>Type</em></em>:
 list of valid modules or anything convertible to it or path convertible to it</p>
 <p><em><em>Default</em></em></p>
