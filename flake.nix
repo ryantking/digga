@@ -100,8 +100,6 @@
       # DEPRECATED - will be removed timely
       deprecated = import ./deprecated.nix {
         inherit (nixpkgs) lib;
-        inherit (self) nixosModules;
-        inherit flake-utils-plus internal-modules importers;
       };
 
     in
@@ -117,15 +115,9 @@
         inherit (generators) mkDeployNodes mkHomeConfigurations;
 
         # DEPRECATED - will be removed soon
-        inherit (deprecated)
-          mkSuites
-          profileMap
-          mkProfileAttrs
-          exporters
-          modules
-          importModules
-          importers
-          ;
+        # inherit (deprecated)
+        #   ...
+        #   ;
 
       };
 

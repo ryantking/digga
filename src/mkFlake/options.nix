@@ -102,8 +102,6 @@ let
   modulesType = with types; coercedListOf moduleType;
   nixosTestsType = with types; coercedListOf nixosTestType;
   devshellModulesType = with types; coercedListOf devshellModuleType;
-  legacyProfilesType = with types; listOf path;
-  legacySuitesType = with types; functionTo attrs;
   suitesType = with types; attrsOf (coercedListOf path);
   usersType = with types; attrsOf userType;
   inputsType = with types; attrsOf flakeType;
@@ -209,26 +207,6 @@ let
     };
   };
 
-  externalModulesDeprecationMessage = ''
-    The `externalModules` option has been removed.
-    Any modules that should be exported should be defined with the `exportedModules`
-    option and all other modules should just go into the `modules` option.
-  '';
-  legacyExternalModulesMod = { config, options, ... }: {
-    options = {
-      externalModules = mkOption {
-        type = with types; modulesType;
-        default = [ ];
-        description = externalModulesDeprecationMessage;
-      };
-    };
-    config = mkIf (config.externalModules != [ ]) {
-      modules = throw ''
-        ERROR: ${externalModulesDeprecationMessage}
-      '';
-    };
-  };
-
   hostDefaultsOpt = name: {
     hostDefaults = mkOption {
       type = with types; hostDefaultsType name;
@@ -287,44 +265,6 @@ let
     };
   };
 
-  suitesDeprecationMessage = ''
-    WARNING: The 'suites' and `profiles` options have been deprecated, you can now create
-    both with the importables option. `rakeLeaves` can be used to create profiles and
-    by passing a module or `rec` set to `importables`, suites can access profiles.
-    Example:
-    ```
-    importables = rec {
-      profiles = digga.lib.rakeLeaves ./profiles;
-      suites = with profiles; { };
-    }
-    ```
-    See https://github.com/divnix/digga/pull/30 for more details
-  '';
-  legacyImportablesMod = { config, options, ... }: {
-    config = {
-      importables = mkIf options.suites.isDefined {
-        suites = builtins.trace suitesDeprecationMessage config.suites;
-      };
-    };
-    options = with types; {
-      # TODO: remove in favor of importables
-      profiles = mkOption {
-        type = pathToOr legacyProfilesType;
-        default = [ ];
-        description = suitesDeprecationMessage;
-      };
-      # TODO: remove in favor of importables
-      suites = mkOption {
-        type = pathToOr legacySuitesType;
-        apply = suites: lib.mkSuites {
-          inherit suites;
-          inherit (config) profiles;
-        };
-        description = suitesDeprecationMessage;
-      };
-    };
-  };
-
   importablesOpt = {
     importables = mkOption {
       type = with types; submoduleWith {
@@ -372,7 +312,6 @@ let
   hostDefaultsType = name: with types; submoduleWith {
     modules = [
       { options = systemOpt // (channelNameOpt true) // regularModulesOpt // (exportedModulesOpt name); }
-      legacyExternalModulesMod
     ];
   };
 
@@ -380,7 +319,6 @@ let
     specialArgs = { inherit self inputs; };
     modules = [
       { options = (hostsOpt "nixos") // (hostDefaultsOpt "nixos") // importablesOpt; }
-      legacyImportablesMod
     ];
   };
 
@@ -388,8 +326,6 @@ let
     specialArgs = { inherit self inputs; };
     modules = [
       { options = regularModulesOpt // (exportedModulesOpt "home") // importablesOpt // usersOpt; }
-      legacyExternalModulesMod
-      legacyImportablesMod
     ];
   };
 
@@ -397,7 +333,6 @@ let
     specialArgs = { inherit self inputs; };
     modules = [
       { options = regularModulesOpt // exportedDevshellModulesOpt; }
-      legacyExternalModulesMod
     ];
   };
 
