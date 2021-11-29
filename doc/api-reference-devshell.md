@@ -35,24 +35,6 @@ list of valid module or path convertible to its or anything convertible to it
 
 
 
-## devshell.externalModules
-The `externalModules` option has been removed.
-Any modules that should be exported should be defined with the `exportedModules`
-option and all other modules should just go into the `modules` option.
-
-
-*_Type_*:
-list of valid modules or anything convertible to it
-
-
-*_Default_*
-```
-[]
-```
-
-
-
-
 ## devshell.modules
 modules to include that won't be exported
 meant importing modules from external flakes

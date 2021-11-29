@@ -145,7 +145,7 @@ let
       description = ''
         tests to run
       '';
-      example = literalExample ''
+      example = literalExpression ''
         [
           {
             name = "testname1";
