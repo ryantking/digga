@@ -2,9 +2,13 @@
 let
 
   pkgs = import inputs.nixpkgs {
-    inherit system; config = { };
+    inherit system;
+    config = { };
     overlays = [ ];
   };
+
+  treefmt = import inputs.treefmt { inherit system; nixpkgs = pkgs; };
+
   devshell = import inputs.devshell { inherit pkgs system; };
 
   withCategory = category: attrset: attrset // { inherit category; };
@@ -129,15 +133,12 @@ devshell.mkShell {
       name = "rm-locks";
     })
     (utils {
-      name = "fmt";
-      help = "Check Nix formatting";
-      command = "nixpkgs-fmt \${@} $PRJ_ROOT";
-    })
-    (utils {
       name = "evalnix";
       help = "Check Nix parsing";
       command = "fd --extension nix --exec nix-instantiate --parse --quiet {} >/dev/null";
     })
+    (utils { package = treefmt.treefmt; })
+
 
     (test "examples" "downstream")
     (test "examples" "groupByConfig")

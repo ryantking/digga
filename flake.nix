@@ -19,6 +19,7 @@
       home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
       devshell.url = "github:numtide/devshell";
+      treefmt.url = "github:numtide/treefmt";
       # fork with urgent fixes that can't be added quickly upstream in respect of upstream user base
       flake-utils-plus.url = "github:divnix/flake-utils-plus";
 
@@ -44,6 +45,7 @@
     , latest
     , deploy
     , devshell
+    , treefmt
     , flake-utils-plus
     , nixos-generators
     , home-manager
@@ -91,7 +93,7 @@
       # Dependency Groups - Style
       checksInputs = { inherit nixpkgs; digga = self; };
       jobsInputs = { inherit nixpkgs; digga = self; };
-      devShellInputs = { inherit nixpkgs devshell; };
+      devShellInputs = { inherit nixpkgs devshell treefmt; };
 
       # .. we hope you like this style.
       # .. it's adopted by a growing number of projects.
