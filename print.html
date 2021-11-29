@@ -139,13 +139,6 @@
 <a href="https://mit-license.org"><img src="https://img.shields.io/github/license/divnix/devos" alt="MIT License" /></a>
 <a href="https://nixos.org"><img src="https://img.shields.io/badge/NixOS-unstable-blue.svg?style=flat&amp;logo=NixOS&amp;logoColor=white" alt="NixOS" /></a>
 <a href="https://matrix.to/#/#devos:nixos.org"><img src="https://img.shields.io/badge/chat-join%20us-brightgreen.svg?style=flat&amp;logo=matrix&amp;logoColor=white" alt="Chat" /></a></p>
-<blockquote>
-<h4 id="-advisory-"><a class="header" href="#-advisory-">⚠ Advisory ⚠</a></h4>
-<p>Digga requires the <a href="https://nixos.wiki/wiki/Flakes">flakes</a> feature available via an <em>experimental</em>
-branch of <a href="https://nixos.org/manual/nix/stable">nix</a>. Until nix 3.0 is released, this project
-should be considered unstable, though quite usable as flakes have been
-maturing <em>well</em> for a while.</p>
-</blockquote>
 <p>Digga — slangy German for &quot;good friend&quot; — is a flake utility library
 that helps you declaratively craft and manage all three layers of your system
 environment within a single <a href="https://nixos.wiki/wiki/Flakes">nix flakes</a> repository:</p>
@@ -201,7 +194,7 @@ your own work as the public flake output.</p>
 other upstream art.</p>
 <h1 id="contributing"><a class="header" href="#contributing">Contributing</a></h1>
 <p>We encourage contributions of any kind. The simplest way to get involved is to
-join the <a href="https://matrix.to/#/#devos:nixos.org">chat</a> or report problems and ideas on the <a href="https://github.com/divnix/digga/issues">issue thread</a>.</p>
+join the <a href="https://matrix.to/#/#devos:matrix.org">chat</a> or report problems and ideas on the <a href="https://github.com/divnix/digga/issues">issue thread</a>.</p>
 <p>To craft well thought out APIs we need all the thoughts regarding new ideas.</p>
 <p>Pull Requests are just as amazing.</p>
 <h1 id="license"><a class="header" href="#license">License</a></h1>
@@ -242,7 +235,7 @@ nix flake</p>
 <p><em><em>Type</em></em>:
 list of strings</p>
 <p><em><em>Default</em></em></p>
-<pre><code>[&quot;aarch64-linux&quot;,&quot;i686-linux&quot;,&quot;x86_64-darwin&quot;,&quot;x86_64-linux&quot;]
+<pre><code>[&quot;aarch64-linux&quot;,&quot;aarch64-darwin&quot;,&quot;i686-linux&quot;,&quot;x86_64-darwin&quot;,&quot;x86_64-linux&quot;]
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="channels-api-container"><a class="header" href="#channels-api-container">Channels API Container</a></h1>
 <p>Configure your channels that you can use throughout your configurations.</p>
@@ -489,7 +482,7 @@ list of valid NixOS test or path convertible to its or anything convertible to i
 <pre><code>[]
 </code></pre>
 <p><em><em>Example</em></em></p>
-<pre><code>{&quot;_type&quot;:&quot;literalExample&quot;,&quot;text&quot;:&quot;[\n  {\n    name = \&quot;testname1\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  }\n  ({ corutils, writers, ... }: {\n    name = \&quot;testname2\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  })\n  ./path/to/test.nix\n];\n&quot;}
+<pre><code>{&quot;_type&quot;:&quot;literalExpression&quot;,&quot;text&quot;:&quot;[\n  {\n    name = \&quot;testname1\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  }\n  ({ corutils, writers, ... }: {\n    name = \&quot;testname2\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  })\n  ./path/to/test.nix\n];\n&quot;}
 </code></pre>
 <h2 id="nixosimportables"><a class="header" href="#nixosimportables">nixos.importables</a></h2>
 <p>Packages of paths to be passed to modules as <code>specialArgs</code>.</p>

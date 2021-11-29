@@ -224,7 +224,7 @@ list of valid NixOS test or path convertible to its or anything convertible to i
 <pre><code>[]
 </code></pre>
 <p><em><em>Example</em></em></p>
-<pre><code>{&quot;_type&quot;:&quot;literalExample&quot;,&quot;text&quot;:&quot;[\n  {\n    name = \&quot;testname1\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  }\n  ({ corutils, writers, ... }: {\n    name = \&quot;testname2\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  })\n  ./path/to/test.nix\n];\n&quot;}
+<pre><code>{&quot;_type&quot;:&quot;literalExpression&quot;,&quot;text&quot;:&quot;[\n  {\n    name = \&quot;testname1\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  }\n  ({ corutils, writers, ... }: {\n    name = \&quot;testname2\&quot;;\n    machine = { ... };\n    testScript = ''\n      # ...\n    '';\n  })\n  ./path/to/test.nix\n];\n&quot;}
 </code></pre>
 <h2 id="nixosimportables"><a class="header" href="#nixosimportables">nixos.importables</a></h2>
 <p>Packages of paths to be passed to modules as <code>specialArgs</code>.</p>
