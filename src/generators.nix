@@ -37,36 +37,28 @@ in
     in
     mkHmConfigs (builtins.attrValues nixosConfigurations);
 
-  mkDeployNodes = hosts: extraConfig:
+  mkDeployNodes = hosts: homes: extraConfig:
     /**
-      Synopsis: mkNodes _nixosConfigurations_
+      Synopsis: mkDeployNodes _nixosConfigurations_ _homeConfigurationsPortable_ _extraConfig_
 
       Generate the `nodes` attribute expected by deploy-rs
-      where _nixosConfigurations_ are `nodes`.
-
-      Example input:
-      ```
-      {
-      hostname-1 = {
-      fastConnection = true;
-      sshOpts = [ "-p" "25" ];
-      };
-      hostname-2 = {
-      sshOpts = [ "-p" "19999" ];
-      sshUser = "root";
-      };
-      }
-      ```
+      where _nixosConfigurations_ are `nodes` and _homeConfigurationsPortable_ are system
+      spaced home configurations.
       **/
     lib.recursiveUpdate
       (lib.mapAttrs
         (_: c:
           {
             hostname = getFqdn c;
-            profiles.system = {
-              user = "root";
-              path = deploy.lib.${c.config.nixpkgs.system}.activate.nixos c;
-            };
+            profiles = {
+              system = {
+                user = "root";
+                path = deploy.lib.${c.config.nixpkgs.system}.activate.nixos c;
+              };
+            } // (lib.mapAttrs (k: v: {
+              user = k;
+              path = deploy.lib.${c.config.nixpkgs.system}.activate.home-manager v;
+            }) homes.${c.config.nixpkgs.system});
           }
         )
         hosts)
