@@ -11,31 +11,16 @@
       latest.url = "github:nixos/nixpkgs/nixos-unstable";
       nixlib.follows = "nixpkgs"; # "github:nix-community/nixpkgs.lib";
       blank.url = "github:divnix/blank";
-      deploy.url = "github:serokell/deploy-rs";
-      deploy.inputs.nixpkgs.follows = "latest";
-      # deploy.inputs.utils.follows = "utils/flake-utils";
+      deploy.url = "github:input-output-hk/deploy-rs";
+      deploy.inputs.nixpkgs.follows = "nixpkgs"; # has an incompatible `fenix/nixpkgs` follows
 
-      home-manager.url = "github:nix-community/home-manager/release-21.11";
-      home-manager.inputs.nixpkgs.follows = "nixpkgs";
+      home-manager.url = "github:nix-community/home-manager";
 
       devshell.url = "github:numtide/devshell";
       treefmt.url = "github:numtide/treefmt";
-      # fork with urgent fixes that can't be added quickly upstream in respect of upstream user base
-      flake-utils-plus.url = "github:divnix/flake-utils-plus";
+      flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
 
       nixos-generators.url = "github:nix-community/nixos-generators";
-      nixos-generators.inputs.nixpkgs.follows = "blank";
-      nixos-generators.inputs.nixlib.follows = "nixlib";
-      # nixos-generators.inputs.utils.follows = "utils/flake-utils";
-
-      # start ANTI CORRUPTION LAYER
-      # remove after https://github.com/NixOS/nix/pull/4641
-      # and uncomment the poper lines using "utils/flake-utils" above
-      flake-utils.url = "github:numtide/flake-utils";
-      flake-utils-plus.inputs.flake-utils.follows = "flake-utils";
-      deploy.inputs.utils.follows = "flake-utils";
-      nixos-generators.inputs.utils.follows = "flake-utils";
-      # end ANTI CORRUPTION LAYER
     };
 
   outputs =
