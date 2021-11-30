@@ -58,6 +58,10 @@ let
     "tests"
   ];
 
+  nixosModules = flake-utils-plus.lib.exportModules config.nixos.hostDefaults.exportedModules;
+  homeModules = flake-utils-plus.lib.exportModules config.home.exportedModules;
+  devshellModules = flake-utils-plus.lib.exportModules config.devshell.exportedModules;
+
   diggaFupArgs = {
     inherit (config)
       self
@@ -83,12 +87,6 @@ let
       modules = config.nixos.hostDefaults.exportedModules ++ defaultHostModules;
     };
 
-    nixosModules = flake-utils-plus.lib.exportModules config.nixos.hostDefaults.exportedModules;
-
-    homeModules = flake-utils-plus.lib.exportModules config.home.exportedModules;
-
-    devshellModules = flake-utils-plus.lib.exportModules config.devshell.exportedModules;
-
     overlays = flake-utils-plus.lib.exportOverlays {
       # since we can't detect overlays owned by self
       # we have to filter out ones exported by the inputs
@@ -100,7 +98,14 @@ let
     outputsBuilder = channels:
       flake-utils-plus.lib.mergeAny (defaultOutputsBuilder channels) (config.outputsBuilder channels);
 
-  };
+  }
+  //
+  (lib.optionalAttrs (nixosModules != { }) { inherit devshellModules; })
+  //
+  (lib.optionalAttrs (homeModules != { }) { inherit devshellModules; })
+  //
+  (lib.optionalAttrs (devshellModules != { }) { inherit devshellModules; })
+  ;
 
 in
 flake-utils-plus.lib.mkFlake
