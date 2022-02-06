@@ -15,6 +15,27 @@
         "type": "github"
       }
     },
+    "darwin": {
+      "inputs": {
+        "nixpkgs": [
+          "latest"
+        ]
+      },
+      "locked": {
+        "lastModified": 1642959729,
+        "narHash": "sha256-xweHBYdgjRcgSJlrHTAMpe2Om11IDpqCwmLYDyyghSs=",
+        "owner": "montchr",
+        "repo": "nix-darwin",
+        "rev": "9c645f5c61ce9401ea0402feccc15a70443df5ad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "montchr",
+        "ref": "add-toplevel-option-lib",
+        "repo": "nix-darwin",
+        "type": "github"
+      }
+    },
     "deploy": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -208,6 +229,7 @@
     "root": {
       "inputs": {
         "blank": "blank",
+        "darwin": "darwin",
         "deploy": "deploy",
         "devshell": "devshell",
         "flake-utils-plus": "flake-utils-plus",

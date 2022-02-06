@@ -1,5 +1,5 @@
 # constructor dependencies
-{ lib, self, inputs, flake-utils-plus, internal-modules, ... }:
+{ lib, self, inputs, darwin, flake-utils-plus, internal-modules, ... }:
 
 {
   # evaluated digga configuration
@@ -51,12 +51,59 @@ let
 
   # evalArgs sets channelName and system to null by default
   # but for proper default handling in fup, null args have to be removed
-  stripHost = args: removeAttrs (lib.filterAttrs (_: arg: arg != null) args) [
+  stripNull = args: (lib.filterAttrs (_: arg: arg != null) args);
+
+  stripHost = args: removeAttrs (stripNull args) [
     # arguments in our hosts/hostDefaults api that shouldn't be passed to fup
     "externalModules" # TODO: remove deprecated option
     "exportedModules"
     "tests"
   ];
+
+  nixosHostDefaults = flake-utils-plus.lib.mergeAny
+    {
+      system = "x86_64-linux";
+      output = "nixosConfigurations";
+
+      # add `self` & `inputs` as specialArgs so their libs can be used in imports
+      specialArgs = config.nixos.importables // { inherit (config) self inputs; };
+
+      modules = config.nixos.hostDefaults.exportedModules ++ defaultHostModules ++ [
+        ({ config, pkgs, self, ... }: {
+          users.mutableUsers = lib.mkDefault false;
+          hardware.enableRedistributableFirmware = lib.mkDefault true;
+          system.configurationRevision = lib.mkIf (self ? rev) self.rev;
+        })
+      ];
+    }
+    (stripNull config.nixos.hostDefaults);
+  nixosHosts = lib.mapAttrs
+    (
+      _: hostConfig:
+        flake-utils-plus.lib.mergeAny
+          nixosHostDefaults
+          (stripNull hostConfig)
+    )
+    config.nixos.hosts;
+
+  darwinHostDefaults = flake-utils-plus.lib.mergeAny
+    {
+      system = "x86_64-darwin";
+      output = "darwinConfigurations";
+      builder = darwin.lib.darwinSystem;
+
+      # add `self` & `inputs` as specialArgs so their libs can be used in imports
+      specialArgs = config.darwin.importables // { inherit (config) self inputs; };
+      modules = config.darwin.hostDefaults.exportedModules ++ defaultHostModules;
+    }
+    (stripNull config.darwin.hostDefaults);
+  darwinHosts = lib.mapAttrs
+    (
+      _: hostConfig: flake-utils-plus.lib.mergeAny
+        darwinHostDefaults
+        (stripNull hostConfig)
+    )
+    config.darwin.hosts;
 
   diggaFupArgs = {
     inherit (config)
@@ -64,7 +111,11 @@ let
       supportedSystems;
     inherit self inputs sharedOverlays;
 
-    hosts = builtins.mapAttrs (_: stripHost) config.nixos.hosts;
+    hosts = builtins.mapAttrs (_: stripHost) (
+      flake-utils-plus.lib.mergeAny
+        nixosHosts
+        darwinHosts
+    );
 
     channels = builtins.mapAttrs
       (name: channel:
@@ -75,13 +126,9 @@ let
       )
       config.channels;
 
-    hostDefaults = flake-utils-plus.lib.mergeAny (stripHost config.nixos.hostDefaults) {
-      # add `self` & `inputs` as specialargs so their libs can be used in imports
-      specialArgs = config.nixos.importables // { inherit self inputs; };
-      modules = config.nixos.hostDefaults.exportedModules ++ defaultHostModules;
-    };
-
     nixosModules = flake-utils-plus.lib.exportModules config.nixos.hostDefaults.exportedModules;
+
+    darwinModules = flake-utils-plus.lib.exportModules config.darwin.hostDefaults.exportedModules;
 
     homeModules = flake-utils-plus.lib.exportModules config.home.exportedModules;
 
@@ -96,14 +143,14 @@ let
     };
 
     outputsBuilder = channels:
-      flake-utils-plus.lib.mergeAny (defaultOutputsBuilder channels) (config.outputsBuilder channels);
-
+      flake-utils-plus.lib.mergeAny
+        (defaultOutputsBuilder channels)
+        (config.outputsBuilder channels);
   };
 
 in
-flake-utils-plus.lib.mkFlake
-  (
-    flake-utils-plus.lib.mergeAny
-      diggaFupArgs
-      extraArgs # for overlays list order
-  )
+flake-utils-plus.lib.mkFlake (
+  flake-utils-plus.lib.mergeAny
+    diggaFupArgs
+    extraArgs # for overlays list order
+)

@@ -46,10 +46,6 @@
 
   globalDefaults = { hmUsers }:
     { config, pkgs, self, ... }: {
-      users.mutableUsers = lib.mkDefault false;
-
-      hardware.enableRedistributableFirmware = lib.mkDefault true;
-
       # digga lib can be accessed in modules directly as config.lib.digga
       lib = {
         inherit (pkgs.lib) digga;
@@ -62,7 +58,5 @@
           `self.nixosConfigurations`, with the `self` module argument.
         '';
       };
-
-      system.configurationRevision = lib.mkIf (self ? rev) self.rev;
     };
 }

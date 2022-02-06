@@ -6,10 +6,17 @@ on:
       - main
       - trying
       - staging
+      - "feature/darwin-hosts-support"
+
 
 jobs:
   check:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # TODO: re-enable fail-fast when darwin support is ready
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
     steps:
     - uses: actions/checkout@v2.4.0
       with:
@@ -19,12 +26,12 @@ jobs:
       with:
         extra_nix_config: |
           system-features = nixos-test benchmark big-parallel kvm recursive-nix
-          substituters = https://nrdxp.cachix.org https://nix-community.cachix.org https://cache.nixos.org
-          trusted-public-keys = nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+          substituters = https://dotfield.cachix.org https://nrdxp.cachix.org https://nix-community.cachix.org https://cache.nixos.org
+          trusted-public-keys = dotfield.cachix.org-1:b5H/ucY/9PDARWG9uWA87ZKWUBU+hnfF30amwiXiaNk= nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
 
     - uses: cachix/cachix-action@v10
       with:
-        name: nrdxp
+        name: dotfield
         signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
@@ -35,6 +42,7 @@ jobs:
     - run: nix flake check --show-trace
 
     # Check /examples/*
-    - run: nix develop --command -- check-downstream --show-trace
+    # FIXME: requires updates for darwin compatibility
+    # - run: nix develop --command -- check-downstream --show-trace
     - run: nix develop --command -- check-groupByConfig --show-trace
     - run: nix develop --command -- check-hmOnly --show-trace

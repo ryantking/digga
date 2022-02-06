@@ -2,8 +2,8 @@
   description = "DevOS environment configuriguration library.";
 
   nixConfig.extra-experimental-features = "nix-command flakes";
-  nixConfig.extra-substituters = "https://nrdxp.cachix.org https://nix-community.cachix.org";
-  nixConfig.extra-trusted-public-keys = "nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=";
+  nixConfig.extra-substituters = "https://dotfield.cachix.org https://nrdxp.cachix.org https://nix-community.cachix.org";
+  nixConfig.extra-trusted-public-keys = "dotfield.cachix.org-1:b5H/ucY/9PDARWG9uWA87ZKWUBU+hnfF30amwiXiaNk= nrdxp.cachix.org-1:Fc5PSqY2Jm1TrWfm88l6cvGWwz3s93c6IOifQWnhNW4= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=";
 
   inputs =
     {
@@ -17,6 +17,11 @@
 
       home-manager.url = "github:nix-community/home-manager/release-21.11";
       home-manager.inputs.nixpkgs.follows = "nixlib";
+
+      # for its `darwin.lib.darwinSystem` builder
+      # TODO: update url once https://github.com/LnL7/nix-darwin/pull/429 is merged
+      darwin.url = "github:montchr/nix-darwin/add-toplevel-option-lib";
+      darwin.inputs.nixpkgs.follows = "latest";
 
       devshell.url = "github:numtide/devshell";
       flake-utils-plus.url = "github:gytis-ivaskevicius/flake-utils-plus";
@@ -34,6 +39,7 @@
     , devshell
     , flake-utils-plus
     , nixos-generators
+    , darwin
     , home-manager
     , ...
     }@inputs:
@@ -60,7 +66,7 @@
           mkFlake' = import ./src/mkFlake {
             inherit (nixlib) lib;
             inherit (flake-utils-plus.inputs) flake-utils;
-            inherit deploy devshell home-manager flake-utils-plus internal-modules tests;
+            inherit darwin deploy devshell home-manager flake-utils-plus internal-modules tests;
           };
         in
         {
@@ -98,7 +104,7 @@
       # what you came for ...
       lib = {
         inherit (flake-utils-plus.inputs.flake-utils.lib) defaultSystems eachSystem eachDefaultSystem filterPackages;
-        inherit (flake-utils-plus.lib) exportModules exportOverlays exportPackages;
+        inherit (flake-utils-plus.lib) exportModules exportOverlays exportPackages mergeAny;
         inherit mkFlake;
         inherit (tests) mkTest allProfilesTest;
         inherit (importers) flattenTree rakeLeaves importOverlays importExportableModules importHosts;
@@ -120,6 +126,7 @@
       # a little extra service ...
       overlays = import ./overlays { inherit inputs; };
       nixosModules = import ./modules;
+      darwinModules = import ./modules;
 
       # digga-local use
       jobs = ufrContract supportedSystems ./jobs jobsInputs;

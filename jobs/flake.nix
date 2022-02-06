@@ -14,7 +14,7 @@
       # .. also: <repo-root>/ufr-polyfills
 
       # Super Stupid Flakes / System As an Input - Style:
-      supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+      supportedSystems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       ufrContract = import ../ufr-polyfills/ufrContract.nix;
 
       # Dependency Groups - Style

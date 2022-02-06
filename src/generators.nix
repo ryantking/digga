@@ -4,7 +4,7 @@ let
     let
       net = c.config.networking;
       fqdn =
-        if net.domain != null
+        if (net ? domain) && (net.domain != null)
         then "${net.hostName}.${net.domain}"
         else net.hostName;
     in
@@ -12,13 +12,13 @@ let
 
 in
 {
-  mkHomeConfigurations = nixosConfigurations:
+  mkHomeConfigurations = systemConfigurations:
     /**
-      Synopsis: mkHomeConfigurations _nixosConfigurations_
+      Synopsis: mkHomeConfigurations _systemConfigurations_
 
       Generate the `homeConfigurations` attribute expected by
-      `home-manager` cli from _nixosConfigurations_ in the form
-      _user@hostname_.
+      `home-manager` cli from _nixosConfigurations_ or _darwinConfigurations_
+      in the form _user@hostname_.
       **/
     let
       op = attrs: c:
@@ -35,7 +35,7 @@ in
       ;
       mkHmConfigs = lib.foldl op { };
     in
-    mkHmConfigs (builtins.attrValues nixosConfigurations);
+    mkHmConfigs (builtins.attrValues systemConfigurations);
 
   mkDeployNodes = hosts: extraConfig:
     /**

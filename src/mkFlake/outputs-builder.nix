@@ -137,6 +137,45 @@ in
         customTests
       else { }
     )
+    //
+    (
+      # for config.self.darwinConfigurations if present & non-empty
+      if (
+        (builtins.hasAttr "darwinConfigurations" config.self) &&
+        (config.self.darwinConfigurations != { })
+      ) then
+        let
+          systemSieve = _: host: host.config.nixpkgs.system == system;
+          hostConfigsOnThisSystem = lib.filterAttrs systemSieve config.self.darwinConfigurations;
+
+          createCustomTestOp = n: host: test:
+            lib.warnIf (!(test ? name)) ''
+              '${n}' has a test without a name. To distinguish tests in the flake output
+              all darwin tests must have names.
+            ''
+              {
+                name = "customTestFor-${n}-${test.name}";
+                value = tests.mkTest host test;
+              };
+
+          createCustomTestsOp = n: host:
+            let
+              op = createCustomTestOp n host;
+            in
+            builtins.listToAttrs (map op config.darwin.hosts.${n}.tests);
+
+          customTests =
+            if (hostConfigsOnThisSystem != [ ])
+            then
+              lib.foldl (a: b: a // b) { }
+                (lib.attrValues
+                  (lib.mapAttrs createCustomTestsOp hostConfigsOnThisSystem))
+            else { };
+
+        in
+        customTests
+      else { }
+    )
   ;
 
 }
